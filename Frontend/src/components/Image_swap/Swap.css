@@ -5,8 +5,12 @@
     /* margin-bottom: 10rem; */
     z-index: 1;
     position: relative;
-    max-width: 100%;
-    max-height: 100%;
+    /* Scale proportionally and crop instead of stretching, so the
+       image keeps its native aspect ratio (no distortion on desktop).
+       Bias the crop slightly toward the top (like iac.iitpkd.ac.in) so
+       subjects in group photos aren't cut off when shown full-height. */
+    object-fit: cover;
+    object-position: center 30%;
 }
 
 @keyframes fadeIn {

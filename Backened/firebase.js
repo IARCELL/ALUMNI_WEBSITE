@@ -8,7 +8,7 @@ let serviceAccount;
 // LOCAL DEVELOPMENT
 // =======================
 if (process.env.NODE_ENV !== "production") {
-    const keyPath = path.join(__dirname, "firebase_auttentication.json");
+    const keyPath = path.join(__dirname, "firebase_authentication.json");
 
     if (!fs.existsSync(keyPath)) {
         throw new Error("❌ serviceAccount.json not found (local)");

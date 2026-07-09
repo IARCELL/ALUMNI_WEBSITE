@@ -10,6 +10,7 @@ import Events from "./pages/Events"
 import ScrollToTop from "./components/ScrollToTop/ScrollToTop"
 import LIfeAtIITPKD from "./pages/LIfeAtIITPKD"
 import NotableAlumni from "./pages/NotableAlumni"
+import GalleryPage from "./pages/Gallery"
 import AlumniDirectorySignIn from "./pages/AlumniDirectorySignIn"
 import PrivateRoute1 from './ProtectedRoute';
 import PrivateRouteProfile from './ProtectedRouteProfile';
@@ -43,6 +44,7 @@ function App() {
         <Route path="/LifeAtIITPKD" element={<LIfeAtIITPKD />} />
         <Route path="/Verification" element={<OTPSignIn/>}/>
         <Route path="/NotableAlumni" element={<NotableAlumni />} />
+        <Route path="/gallery" element={<GalleryPage />} />
         <Route path="/AlumniDirectorySignIn" element={<AlumniDirectorySignIn/>}/>
         {/* <Route path="/SignIn" element={<SignIn setToken={setToken} />} /> */}
         <Route path="/SignUp" element={<SignUpPage />} />

@@ -44,6 +44,7 @@ const Navbar = () => {
         </div>
 
         <Link to="/events" className="desktopMenuListItem">Events</Link>
+        <Link to="/gallery" className="desktopMenuListItem">Gallery</Link>
 
         {token ? (
           <div className="authSection">
@@ -85,6 +86,7 @@ const Navbar = () => {
         )}
 
         <Link to="/events" className="ListItem" onClick={() => setShowMenu(false)}>Events</Link>
+        <Link to="/gallery" className="ListItem" onClick={() => setShowMenu(false)}>Gallery</Link>
 
         {token ? (
           <>

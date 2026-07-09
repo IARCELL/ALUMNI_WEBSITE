@@ -1,0 +1,135 @@
+.gallery-page {
+  /* Clear the fixed navbar (min-height 5rem) so the heading isn't covered */
+  padding: calc(5rem + 1.5rem) 0 3rem;
+  min-height: 100vh;
+}
+
+.gallery-header {
+  text-align: center;
+  margin: 0 auto 2rem;
+  padding: 0 1.25rem;
+  max-width: 800px;
+}
+
+.gallery-header h1 {
+  font-size: 2.25rem;
+  font-weight: 700;
+  margin: 0 0 0.5rem;
+}
+
+.gallery-header p {
+  color: #555;
+  margin: 0;
+}
+
+/* ── Rectangular scrolling wall ─────────────────────────────── */
+.gallery-wall {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+  overflow: hidden;
+}
+
+.gallery-row {
+  overflow: hidden;
+  width: 100%;
+}
+
+.gallery-track {
+  display: flex;
+  gap: 1rem;
+  width: max-content;
+  /* slow, steady self-scroll */
+  animation: gallery-scroll 70s linear infinite;
+  will-change: transform;
+}
+
+.gallery-track.reverse {
+  animation-direction: reverse;
+}
+
+/* Pause the drift when the user is looking at a row */
+.gallery-row:hover .gallery-track {
+  animation-play-state: paused;
+}
+
+@keyframes gallery-scroll {
+  from { transform: translateX(0); }
+  /* track holds the row 4×, so -25% is exactly one set → seamless loop */
+  to   { transform: translateX(-25%); }
+}
+
+.gallery-item {
+  flex: 0 0 auto;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  border-radius: 12px;
+  overflow: hidden;
+  line-height: 0;
+}
+
+.gallery-item img {
+  height: 220px;
+  width: auto;
+  object-fit: cover;
+  display: block;
+  border-radius: 12px;
+  transition: transform 0.25s ease, filter 0.25s ease;
+}
+
+.gallery-item:hover img {
+  transform: scale(1.04);
+  filter: brightness(1.05);
+}
+
+/* ── Enlarged (lightbox) view ───────────────────────────────── */
+.gallery-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  animation: gallery-fade 0.2s ease;
+}
+
+@keyframes gallery-fade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.gallery-lightbox img {
+  max-width: 92vw;
+  max-height: 82vh;
+  object-fit: contain; /* show the whole image */
+  border-radius: 8px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+.gallery-caption {
+  color: #eee;
+  margin: 1rem 0 0;
+  font-size: 0.95rem;
+}
+
+.gallery-close {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.75rem;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 2.5rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+@media (max-width: 600px) {
+  .gallery-item img { height: 150px; }
+}

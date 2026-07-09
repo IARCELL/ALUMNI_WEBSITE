@@ -4,4 +4,5 @@
 firebase-service-account.json
 .vercel
 firebase_auttentication.json
+firebase_authentication.json
 test.js

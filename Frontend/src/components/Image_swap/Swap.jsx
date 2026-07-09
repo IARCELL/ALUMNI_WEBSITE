@@ -41,7 +41,7 @@ const Swap = ({ playstatus, imgcount }) => {
       img4,
       img5,
      
-      "https://www.iitpkd.ac.in/sites/default/files/styles/with_scale_/public/2024-05/Acheivement1.png?itok=EP7MWmnA",
+      "https://www.iitpkd.ac.in/sites/default/files/2024-05/Acheivement1.png",
       "https://www.iitpkd.ac.in/sites/default/files/2024-02/Priority1_Saraswati%20Block-1.jpg",
     ];
 
