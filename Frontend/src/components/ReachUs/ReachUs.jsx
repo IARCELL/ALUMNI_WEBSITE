@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import './ReachUs.css';
 
 const ReachUs = () => {
@@ -36,15 +36,6 @@ const ReachUs = () => {
             alert('An error occurred. Please try again later.');
         }
     };
-    // Publication data
-    const footprintsEditions = [
-  { id: 1, title: "Edition 1", url: "/footprints/Footprints_Edition1.pdf" },
-  { id: 2, title: "Issue 2", url: "/footprints/Footprints_Issue2.pdf" },
-  { id: 3, title: "Edition 2", url: "/footprints/Footprints_Edition2.pdf" },
-  { id: 4, title: "Edition 3", url: "/footprints/Footprints_Edition3.pdf" },
-  { id: 5, title: "Edition 4", url: "/footprints/Footprints_Edition4.pdf" },
-  { id: 6, title: "Edition 5", url: "/footprints/Footprints_Edition5.pdf" }
-];
 
 
     const newsletters = [
@@ -116,6 +107,12 @@ const ReachUs = () => {
                         
                         <form onSubmit={handleSubmit} className="modern-form">
                             <div className="form-input-group">
+                                <div className="input-icon">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                        <circle cx="12" cy="7" r="4"></circle>
+                                    </svg>
+                                </div>
                                 <input
                                     type="text"
                                     value={name}
@@ -123,11 +120,17 @@ const ReachUs = () => {
                                     required
                                     placeholder=" "
                                 />
-                                <label>Your Name</label>
+                                <label>Full Name</label>
                                 <div className="input-underline"></div>
                             </div>
                             
                             <div className="form-input-group">
+                                <div className="input-icon">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                        <polyline points="22,6 12,13 2,6"></polyline>
+                                    </svg>
+                                </div>
                                 <input
                                     type="email"
                                     value={email}
@@ -135,11 +138,16 @@ const ReachUs = () => {
                                     required
                                     placeholder=" "
                                 />
-                                <label>Email Address</label>
+                                <label>Email</label>
                                 <div className="input-underline"></div>
                             </div>
                             
                             <div className="form-input-group textarea-group">
+                                <div className="input-icon">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                                    </svg>
+                                </div>
                                 <textarea
                                     value={message}
                                     onChange={(e) => setMessage(e.target.value)}
@@ -147,12 +155,12 @@ const ReachUs = () => {
                                     placeholder=" "
                                     rows="4"
                                 />
-                                <label>Your Message</label>
+                                <label>Message</label>
                                 <div className="input-underline"></div>
                             </div>
                             
                             <button type="submit" className="form-submit-btn">
-                                <span>Send Message</span>
+                                <span>Send</span>
                                 <div className="arrow-icon">→</div>
                             </button>
                         </form>

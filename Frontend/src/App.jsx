@@ -1,6 +1,4 @@
-import React from 'react'
-import { useState } from 'react';
-import { BrowserRouter as Router, Route,Routes } from "react-router-dom"
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom"
 import Home from "./pages/Home"
 import About from "./pages/About"
 import Event1 from "./pages/Events/Event1"
@@ -12,7 +10,6 @@ import LIfeAtIITPKD from "./pages/LIfeAtIITPKD"
 import NotableAlumni from "./pages/NotableAlumni"
 import GalleryPage from "./pages/Gallery"
 import AlumniDirectorySignIn from "./pages/AlumniDirectorySignIn"
-import PrivateRoute1 from './ProtectedRoute';
 import PrivateRouteProfile from './ProtectedRouteProfile';
 import AlumniDirectory from "./pages/AlumniDirectory"
 import useStore from './Store';
@@ -23,7 +20,7 @@ import Admin from './components/Admin/Admin';
 import './App.css';
 import IDCardGeneratorPage from './pages/IDCardGenerator/IDCardGenerator';
 import NotFoundPage from './components/PageNotFound/NotFoudPage';
-import Intro from './components/INTRO/Intro';
+import Preloader from './components/Preloader/Preloader';
 function App() {
   const token = useStore((state) => state.token);
   const user = useStore((state) => state.userRole);
@@ -33,7 +30,7 @@ function App() {
     <Router>
       <ScrollToTop />
       <Routes>
-        <Route path='/' element={<Intro/>}/>
+        <Route path='/' element={<Preloader/>}/>
         <Route path="/home" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path="/Event1" element={<Event1 />} />
