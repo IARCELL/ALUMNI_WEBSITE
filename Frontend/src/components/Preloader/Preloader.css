@@ -4,7 +4,7 @@
   left: 0;
   width: 100%;
   height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #ffffff;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -19,48 +19,50 @@
   justify-content: center;
   z-index: 2;
   position: relative;
+  max-height: 100vh;
+  padding: 20px;
 }
 
 .logo-container {
   position: relative;
-  width: 200px;
-  height: 200px;
+  width: 700px;
+  height: 700px;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 30px;
+  margin-bottom: 0px;
 }
 
 .logo {
-  width: 150px;
-  height: 150px;
-  object-fit: contain;
-  position: relative;
-  z-index: 2;
-  filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.3));
+  width: 150px !important;
+  height: 150px !important;
+  object-fit: contain !important;
+  position: relative !important;
+  z-index: 2 !important;
+  transform: scale(3) !important;
+  filter: drop-shadow(0 35px 90px rgba(0, 0, 0, 0.5)) !important;
 }
 
 .logo-glow {
   position: absolute;
-  width: 180px;
-  height: 180px;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.4) 0%, transparent 70%);
+  width: 650px;
+  height: 650px;
+  background: radial-gradient(circle, rgba(138, 138, 114, 0.5) 0%, transparent 70%);
   border-radius: 50%;
   z-index: 1;
 }
 
 .tagline-container {
   text-align: center;
-  margin-bottom: 40px;
+  margin-bottom: 2px;
 }
 
 .tagline {
-  font-size: 28px;
-  font-weight: 600;
-  color: #ffffff;
+  font-size: 20px;
+  font-weight: 500;
+  color: #8a8a72;
   margin: 5px 0;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-  letter-spacing: 1px;
+  letter-spacing: 0.5px;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
@@ -68,28 +70,27 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 15px;
-  width: 300px;
+  gap: 4px;
+  width: 240px;
 }
 
 .loading-bar {
   width: 100%;
   height: 4px;
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(0, 0, 0, 0.1);
   border-radius: 10px;
   overflow: hidden;
-  backdrop-filter: blur(10px);
 }
 
 .loading-progress {
   height: 100%;
-  background: linear-gradient(90deg, #ffffff 0%, #f0f0f0 100%);
+  background: linear-gradient(90deg, #8a8a72 0%, #6b6b5a 100%);
   border-radius: 10px;
-  box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+  box-shadow: 0 0 10px rgba(138, 138, 114, 0.3);
 }
 
 .loading-text {
-  color: #ffffff;
+  color: #8a8a72;
   font-size: 14px;
   font-weight: 500;
   letter-spacing: 2px;
@@ -114,35 +115,37 @@
   position: absolute;
   width: 4px;
   height: 4px;
-  background: rgba(255, 255, 255, 0.6);
+  background: rgba(138, 138, 114, 0.4);
   border-radius: 50%;
-  box-shadow: 0 0 6px rgba(255, 255, 255, 0.8);
+  box-shadow: 0 0 6px rgba(138, 138, 114, 0.6);
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
   .logo-container {
-    width: 150px;
-    height: 150px;
+    width: 700px;
+    height: 700px;
   }
 
   .logo {
-    width: 120px;
-    height: 120px;
+    width: 150px !important;
+    height: 150px !important;
+    object-fit: contain !important;
+    transform: scale(2.3) !important;
   }
 
   .logo-glow {
-    width: 140px;
-    height: 140px;
+    width: 650px;
+    height: 650px;
   }
 
   .tagline {
-    font-size: 22px;
+    font-size: 18px;
     padding: 0 20px;
   }
 
   .loading-container {
-    width: 250px;
+    width: 230px;
   }
 
   .loading-text {
@@ -152,22 +155,24 @@
 
 @media (max-width: 480px) {
   .logo-container {
-    width: 120px;
-    height: 120px;
+    width: 600px;
+    height: 600px;
   }
 
   .logo {
-    width: 100px;
-    height: 100px;
+    width: 150px !important;
+    height: 150px !important;
+    object-fit: contain !important;
+    transform: scale(2) !important;
   }
 
   .logo-glow {
-    width: 120px;
-    height: 120px;
+    width: 500px;
+    height: 500px;
   }
 
   .tagline {
-    font-size: 18px;
+    font-size: 16px;
     padding: 0 15px;
   }
 
