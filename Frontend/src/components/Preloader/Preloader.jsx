@@ -9,15 +9,12 @@ export default function Preloader() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const seen = localStorage.getItem("introSeen");
-    if (seen) {
-      setLoading(false);
-      setTimeout(() => navigate("/home"), 500);
-      return;
-    }
-
+    // Clear old localStorage key if it exists
+    localStorage.removeItem("introSeen");
+    
+    // Always show preloader - it's a better UX
+    // The preloader will show on every page load for 3.5 seconds
     const timer = setTimeout(() => {
-      localStorage.setItem("introSeen", "true");
       setLoading(false);
       setTimeout(() => navigate("/home"), 800);
     }, 3500);
