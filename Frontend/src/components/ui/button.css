@@ -1,0 +1,129 @@
+/* ─── Base ─────────────────────────────────────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  white-space: nowrap;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1;
+  outline: none;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.15s ease;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.btn:focus-visible {
+  outline: 3px solid rgba(59, 130, 246, 0.5);
+  outline-offset: 2px;
+}
+
+.btn:disabled,
+.btn[aria-disabled="true"] {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.btn svg {
+  pointer-events: none;
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+}
+
+/* ─── Sizes ────────────────────────────────────────────────────────────────── */
+.btn--default {
+  height: 36px;
+  padding: 8px 16px;
+}
+
+.btn--sm {
+  height: 32px;
+  padding: 6px 12px;
+  gap: 6px;
+  border-radius: 6px;
+}
+
+.btn--lg {
+  height: 40px;
+  padding: 8px 24px;
+}
+
+.btn--icon {
+  width: 36px;
+  height: 36px;
+  padding: 0;
+}
+
+/* ─── Variants ─────────────────────────────────────────────────────────────── */
+.btn--primary {
+  background: #0f172a;
+  color: #f8fafc;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.btn--primary:hover {
+  background: rgba(15, 23, 42, 0.9);
+}
+
+.btn--destructive {
+  background: #ef4444;
+  color: #fff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.btn--destructive:hover {
+  background: rgba(239, 68, 68, 0.9);
+}
+
+.btn--destructive:focus-visible {
+  outline-color: rgba(239, 68, 68, 0.5);
+}
+
+.btn--outline {
+  background: transparent;
+  color: inherit;
+  border-color: #e2e8f0;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.btn--outline:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+.btn--secondary {
+  background: #f1f5f9;
+  color: #0f172a;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.btn--secondary:hover {
+  background: rgba(241, 245, 249, 0.8);
+}
+
+.btn--ghost {
+  background: transparent;
+  color: inherit;
+}
+
+.btn--ghost:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+.btn--link {
+  background: transparent;
+  color: #2563eb;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  border: none;
+}
+
+.btn--link:hover {
+  text-decoration: underline;
+}

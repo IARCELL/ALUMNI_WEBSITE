@@ -23,32 +23,28 @@
     justify-content: center;
     align-items: center;
     position: relative;
-    gap: 1.5rem;
+    gap: 1.25rem;
 }
 
+/* ---------- Arrows ---------- */
+/* Arrows now live in normal flex flow next to the card, not absolutely
+   positioned inside it — this is what was causing them to overlap the text. */
 .testimonial-arrow {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
+    position: static;
+    flex-shrink: 0;
     width: 44px;
     height: 44px;
     background: #fff;
-    color: #FFD700;
-    border: none;
+    border: 2px solid transparent;
     border-radius: 50%;
-    font-size: 2rem;
     box-shadow: 0 2px 8px rgba(124, 77, 255, 0.10);
     cursor: pointer;
     z-index: 5;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: background 0.2s, color 0.2s, border 0.2s;
-    will-change: transform;
+    transition: background 0.2s, border 0.2s, transform 0.2s, box-shadow 0.2s;
 }
-
-
-/* Increase tap area */
 
 .arrow-inner {
     display: flex;
@@ -56,94 +52,53 @@
     justify-content: center;
 }
 
-.testimonial-arrow.left {
-    left: calc(50% - 470px);
-    left: 10px;
-}
-
-.testimonial-arrow.right {
-    right: calc(50% - 470px);
-    right: 10px;
-}
-
-@media (max-width: 1200px) {
-    .testimonial-arrow.left {
-        left: calc(50% - 320px);
-    }
-    .testimonial-arrow.right {
-        right: calc(50% - 320px);
-    }
-}
-
-@media (max-width: 900px) {
-    .testimonial-arrow.left {
-        left: 0;
-    }
-    .testimonial-arrow.right {
-        right: 0;
-    }
-}
-
 .testimonial-arrow:hover {
-    background: #fff;
-    color: #FFD700;
     border: 2px solid #FFD700;
-    transform: translateY(-50%) scale(1.1);
-    /* background: rgba(0, 0, 0, 0.8); */
+    transform: scale(1.1);
+    box-shadow: 0 4px 14px rgba(124, 77, 255, 0.16);
 }
 
+@media (max-width: 768px) {
+    .testimonial-arrow {
+        display: none !important;
+    }
+}
+
+@media (max-width: 600px) {
+    .testimonial-arrow {
+        width: 32px;
+        height: 32px;
+    }
+}
+
+/* ---------- Cards ---------- */
 .testimonial-card {
     background: #fff;
     border-radius: 18px;
     box-shadow: 0 8px 48px 8px rgba(135, 206, 250, 0.22);
-    padding: 1.2rem 3.5rem 1.2rem 3.5rem;
-    min-width: 520px;
-    max-width: 700px;
-    /* min-height: 300px; */
+    padding: 2rem 2.75rem;
     text-align: left;
     position: relative;
-    transition: box-shadow 0.2s, opacity 0.2s, filter 0.2s;
-    z-index: 2;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-.testimonial-card.faded {
-    opacity: 0.35;
-    filter: blur(1.5px);
-    box-shadow: none;
-    z-index: 1;
-    min-width: 320px;
-    max-width: 320px;
-    pointer-events: none;
-    background: #fff3b0;
-    color: #c59d00;
-    align-self: center;
-    min-height: 260px;
-    max-height: 260px;
+    transition: box-shadow 0.2s, opacity 0.2s, filter 0.2s, transform 0.2s;
 }
 
 .testimonial-card.main {
     z-index: 3;
     box-shadow: 0 16px 64px 12px rgba(135, 206, 250, 0.28);
-    min-width: 600px;
-    /* max-width: 800px; */
-    /* min-height: 350px; */
-    /* max-height: 250px; */
-    /* overflow: hidden; */
-    /* height: 260px; */
-    background: #fff;
+    width: 620px;
+    max-width: 700px;
+    height: 300px;
     color: #222;
-    align-self: stretch;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+    transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+                transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .testimonial-card.main:hover {
-    transform: scale(1.02);
+    transform: translateY(-2px);
     box-shadow: 0 24px 80px 16px rgba(135, 206, 250, 0.32);
 }
 
@@ -157,46 +112,73 @@
     transform: translateX(60px);
 }
 
-.testimonial-card.faded {
-    min-height: 200px;
-    /* max-height: 200px; */
-    font-size: 0.7rem;
-    display: flex;
-    align-items: center;
-    transform: scale(0.9) translateY(10px);
+/* Subtle quote watermark sitting BEHIND the text, instead of a big glyph
+   overlapping the first line of the message. */
+.testimonial-card.main::before {
+    content: "\201D";
+    position: absolute;
+    top: -18px;
+    right: 24px;
+    font-size: 8rem;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-weight: 700;
+    line-height: 1;
+    color: rgba(239, 159, 32, 0.08);
+    z-index: 0;
+    pointer-events: none;
 }
 
+.testimonial-card.faded {
+    opacity: 0.4;
+    filter: blur(1.5px);
+    box-shadow: 0 4px 24px rgba(135, 206, 250, 0.14);
+    z-index: 1;
+    width: 260px;
+    height: 260px;
+    pointer-events: none;
+    background: #fff;
+    color: #666;
+    align-self: center;
+    display: flex;
+    align-items: center;
+    transform: scale(0.92);
+}
+
+.testimonial-card.faded .testimonial-message {
+    -webkit-line-clamp: 5;
+    line-clamp: 5;
+    margin-bottom: 0;
+}
+
+/* ---------- Content ---------- */
 .testimonial-content {
-    pointer-events: auto;
     position: relative;
-    padding-right: 0;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
 
 .testimonial-message {
-    /* font-size: 1rem;
-    color: #333;
-    font-style: italic;
-    min-height: 70px;
-    z-index: 3;
-    margin-bottom: 2.2rem;
-    display: block;
-    align-items: flex-start;
-    text-align: left;
-     */
-    /* margin: 2.5rem; */
-    font-size: 1rem;
+    font-size: 1.05rem;
     color: #333;
     font-style: italic;
     display: -webkit-box;
     -webkit-line-clamp: 4;
+    line-clamp: 4;
     -webkit-box-orient: vertical;
     overflow: hidden;
-    transition: all 0.3s ease;
+    line-height: 1.6;
 }
 
 .testimonial-message.expanded {
     -webkit-line-clamp: unset;
+    line-clamp: unset;
     overflow: visible;
+}
+
+.testimonial-card.main .testimonial-content > .testimonial-message {
+    flex: 0 1 auto;
 }
 
 .swipe-hint {
@@ -215,85 +197,105 @@
 .read-more-btn {
     background: none;
     border: none;
-    color: #FFD700;
+    color: rgb(239, 159, 32);
     cursor: pointer;
     font-weight: 600;
-    margin-top: 6px;
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+    padding: 0;
     text-align: left;
+    align-self: flex-start;
 }
 
 .read-more-btn:hover {
     text-decoration: underline;
 }
 
+/* Meta block always pinned to the bottom of the card, regardless of
+   message length, so short and long testimonials look identical in height. */
 .testimonial-meta {
-    margin-top: 5px;
+    margin-top: auto;
+    padding-top: 1rem;
     display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 0.1rem;
-    text-align: right;
+    align-items: center;
+    gap: 0.75rem;
 }
 
-.testimonial-meta .testimonial-gold-line {
-    width: 200px;
-    height: 3px;
-    background: #FFD700;
-    border-radius: 2px;
-    margin-top: 0rem;
-    margin-bottom: 2rem;
+.testimonial-avatar {
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgb(239, 159, 32);
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.testimonial-meta-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
 }
 
 .testimonial-name {
-    font-weight: bold;
+    font-weight: 700;
     color: #222;
-    font-size: 1.1rem;
+    font-size: 1.05rem;
+    line-height: 1.3;
 }
 
-.testimonial-year {
-    font-size: 0.98rem;
-    color: #666;
-}
-
-.testimonial-job {
-    font-size: 0.98rem;
-    color: #222;
-}
-
-.testimonial-card.main .testimonial-message {
-    font-size: 1.08rem;
-    margin-top: 2rem;
-}
-
-.testimonial-card.faded .testimonial-message {
+.testimonial-role-line {
     font-size: 0.9rem;
-    margin-top: 0rem;
+    color: #777;
+    line-height: 1.3;
 }
 
-.testimonial-quote-absolute {
-    position: absolute;
-    top: 18px;
-    left: 32px;
-    font-size: 4.2rem;
-    color: #e0e0e0;
-    font-family: serif;
-    font-weight: bold;
-    line-height: 1;
-    z-index: 2;
-    pointer-events: none;
+.testimonial-gold-line {
+    display: none;
 }
 
+/* ---------- Responsive ---------- */
 @media (max-width: 900px) {
-    .testimonial-slider {
-        gap: 0.5rem;
-    }
     .testimonial-card.main {
-        min-width: 320px;
-        max-width: 98vw;
+        width: 480px;
+        padding: 1.75rem 2rem;
     }
     .testimonial-card.faded {
-        min-width: 120px;
-        max-width: 120px;
+        width: 150px;
+        height: 240px;
+    }
+    .testimonial-card.main::before {
+        font-size: 6rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .testimonial-slider {
+        gap: 0;
+    }
+    .testimonial-card.main {
+        width: 92vw;
+        max-width: 92vw;
+        height: auto;
+        min-height: 260px;
+        padding: 1.5rem 1.25rem;
+        margin: 0 auto;
+    }
+    .testimonial-card.faded {
+        display: none;
+    }
+    .testimonial-message {
+        font-size: 0.95rem;
+        line-height: 1.5;
+    }
+    .testimonial-card.main::before {
+        font-size: 4.5rem;
+        top: -8px;
+        right: 12px;
     }
 }
 
@@ -310,57 +312,7 @@
         margin-bottom: 1.2rem;
     }
     .testimonial-card.main {
-        min-width: 90vw;
-        max-width: 98vw;
-        padding: 1.2rem 0.5rem 1.5rem 0.5rem;
-    }
-    .testimonial-card.faded {
-        min-width: 40px;
-        max-width: 40px;
-        font-size: 0.7rem;
-    }
-    .testimonial-arrow {
-        width: 32px;
-        height: 32px;
-        font-size: 1.1rem;
-        /* margin: 1px 1px; */
-        /* left: -16px; */
-        /* right: -16px; */
-    }
-}
-
-@media (max-width: 768px) {
-    .testimonial-arrow {
-        display: none !important;
-    }
-    .testimonial-slider {
-        gap: 0;
-    }
-    .testimonial-card.main {
-        min-width: 92vw;
-        max-width: 92vw;
-        padding: 1rem;
-        margin: 0 auto;
-    }
-    .testimonial-card.faded {
-        display: none;
-        /* 🔥 remove side cards completely */
-    }
-    .testimonial-message {
-        font-size: 0.95rem;
-        line-height: 1.5;
-    }
-    .testimonial-meta {
-        align-items: flex-start;
-        text-align: left;
-    }
-    .testimonial-meta .testimonial-gold-line {
-        width: 120px;
-        margin-bottom: 1rem;
-    }
-    .testimonial-quote-absolute {
-        font-size: 2.5rem;
-        top: 10px;
-        left: 15px;
+        width: 92vw;
+        padding: 1.25rem 1rem;
     }
 }

@@ -1,32 +1,49 @@
-import React, { useEffect } from 'react';
-
-import play_icon from '../../assets/play_icon.png';
-import pause_icon from '../../assets/pause_icon.png';
+import Autoplay from 'embla-carousel-autoplay';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselPrevious,
+  CarouselNext,
+} from '../ui/carousel';
 import './Image_swap.css';
-import Swap from './Swap';
 
-const Image_swap = ({ setimgcount, playstatus, imgcount, setplaystatus }) => {
-  
+const slides = [
+  { src: '/gallery/2Y4A0622.jpg', alt: 'IAR Cell event' },
+  { src: '/gallery/2Y4A3190.jpg', alt: 'IAR Cell event' },
+  { src: '/gallery/2Y4A9607.jpg', alt: 'IAR Cell event' },
+  { src: '/gallery/DSC00332.jpg', alt: 'IAR Cell event' },
+  { src: '/gallery/DSC02410.jpg', alt: 'IAR Cell event' },
+];
+
+const Image_swap = () => {
+  const autoplayPlugin = Autoplay({
+    delay: 3000,
+    stopOnInteraction: false,
+    stopOnMouseEnter: false,
+    stopOnFocusIn: false,
+  });
 
   return (
-    
-      <div className="full">
-        <Swap playstatus={playstatus} imgcount={imgcount} />
-        <div className="dot-play">
-          <ul className="dots">
-            <li onClick={() => setimgcount(0)} className={imgcount === 0 ? 'dot-orange' : 'dot-white'}></li>
-            <li onClick={() => setimgcount(1)} className={imgcount === 1 ? 'dot-orange' : 'dot-white'}></li>
-            <li onClick={() => setimgcount(2)} className={imgcount === 2 ? 'dot-orange' : 'dot-white'}></li>
-          <li onClick={() => setimgcount(3)} className={imgcount === 3 ? 'dot-orange' : 'dot-white'}></li>
-          {/* <li onClick={() => setimgcount(4)} className={imgcount === 4 ? 'dot-orange' : 'dot-white'}></li> */}
-          
-          </ul>
-        </div>
-        {/* <div className="play-icon">
-          <img onClick={() => setplaystatus(!playstatus)} src={playstatus ? pause_icon : play_icon} alt="play/pause" />
-        </div> */}
-      </div>
-    
+    <div className="carousel-section">
+      <Carousel opts={{ loop: true, align: 'start', skipSnaps: false, dragFree: false }} plugins={[autoplayPlugin]}>
+        <CarouselContent>
+          {slides.map((slide, index) => (
+            <CarouselItem key={index} className="carousel-item">
+              <div className="carousel-card">
+                <img
+                  src={slide.src}
+                  alt={slide.alt}
+                  className="carousel-card-image"
+                />
+              </div>
+            </CarouselItem>
+          ))}
+        </CarouselContent>
+        <CarouselPrevious />
+        <CarouselNext />
+      </Carousel>
+    </div>
   );
 };
 
