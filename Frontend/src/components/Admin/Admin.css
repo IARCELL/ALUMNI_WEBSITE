@@ -890,6 +890,96 @@ body {
     }
 }
 
+@media (max-width: 768px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    .stat-card {
+        padding: 15px;
+    }
+    .stat-card h3 {
+        font-size: 14px;
+    }
+    .stat-card p {
+        font-size: 20px;
+    }
+    .sector-list {
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 576px) {
+    .header1 {
+        padding: 15px;
+        flex-direction: column;
+        gap: 10px;
+    }
+    .header-right {
+        width: 100%;
+        flex-wrap: wrap;
+    }
+    .search-input {
+        width: 100%;
+    }
+    .action-bar {
+        margin: 5px;
+        padding: 10px;
+    }
+    .action-buttons {
+        flex-direction: column;
+        width: 100%;
+    }
+    .btn {
+        width: 100%;
+        justify-content: center;
+    }
+    .table-container {
+        margin: 10px 5px;
+    }
+    .pagination {
+        flex-direction: column;
+        gap: 10px;
+        padding: 10px;
+    }
+    .pagination-controls {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    .alumni-table th,
+    .alumni-table td {
+        padding: 8px 10px;
+        font-size: 0.85rem;
+    }
+    .table-wrapper {
+        font-size: 0.85rem;
+    }
+}
+
+/* Landscape orientation for tablets */
+@media (max-width: 1024px) and (orientation: landscape) {
+    .sidebar {
+        width: 200px;
+    }
+    .main-content {
+        margin-left: 200px;
+    }
+}
+
+@media (max-width: 768px) and (orientation: landscape) {
+    .header1 {
+        padding: 10px;
+        min-height: auto;
+    }
+    .page-title {
+        font-size: 1.2rem;
+    }
+    .action-bar {
+        padding: 8px;
+        margin: 5px;
+    }
+}
+
 
 /* ----------------stats */
 

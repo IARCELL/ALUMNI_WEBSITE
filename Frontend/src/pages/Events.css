@@ -226,14 +226,48 @@
 }
 
 @media (max-width: 480px) {
+    .events-container {
+        padding: 0.5rem 0;
+        margin-top: 2rem;
+    }
+    .events-header {
+        margin-bottom: 1.5rem;
+        padding: 0 0.75rem;
+    }
     .events-header h1 {
-        font-size: 1.5rem;
+        font-size: 1.3rem;
     }
     .events-header p {
-        font-size: 1rem;
+        font-size: 0.9rem;
     }
-    .event-card-content {
-        padding: 1.25rem;
+    .events-grid {
+        gap: 1rem;
+        padding: 0 0.75rem;
+    }
+    .event-card-inner {
+        grid-template-columns: 100px 1fr;
+    }
+    .event-title {
+        font-size: 1.1rem;
+    }
+    .event-info-col {
+        padding: 0.4rem 0.6rem;
+    }
+    .date-day {
+        font-size: 1.2rem;
+    }
+    .date-weekday,
+    .date-monthyear {
+        font-size: 0.75rem;
+    }
+    .event-venue,
+    .event-desc,
+    .event-duration {
+        font-size: 0.75rem;
+        line-height: 1.05;
+    }
+    .view-details {
+        font-size: 0.75rem;
     }
 }
 

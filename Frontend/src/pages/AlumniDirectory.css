@@ -148,9 +148,57 @@
 @media (max-width: 768px) {
     .filter-container {
         padding: 16px;
+        flex-direction: column;
+        gap: 10px;
+    }
+    .filter-container select,
+    .filter-container input {
+        width: 100%;
+        flex: 1 1 100%;
+    }
+    .filter-container button {
+        width: 100%;
+        padding: 12px;
     }
     .alumni-card {
         padding: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .alumni-page {
+        padding-top: 70px;
+    }
+    .filter-container {
+        margin: 10px;
+        padding: 0.75rem;
+        gap: 8px;
+    }
+    .filter-container select,
+    .filter-container input {
+        padding: 8px 10px;
+        font-size: 0.9rem;
+    }
+    .filter-container button {
+        padding: 10px;
+        font-size: 0.9rem;
+    }
+    .alumni-list {
+        padding: 0 10px 30px;
+        gap: 16px;
+    }
+    .alumni-card {
+        padding: 16px;
+    }
+    .alumni-card h3 {
+        font-size: 1.05rem;
+    }
+    .alumni-card p {
+        font-size: 0.9rem;
+    }
+    .load-more-btn {
+        padding: 10px 24px;
+        font-size: 0.9rem;
     }
 }
 

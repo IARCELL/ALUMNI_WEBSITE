@@ -1,19 +1,14 @@
 .LAIcontainer {
-    /* width: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center; */
     height: auto;
-    width: 100vw;
+    width: 100%;
     margin: 0 auto;
     max-width: 75rem;
+    padding: 0 1rem;
 }
 
 .LAIwrapper {
     width: 100%;
     padding: 3rem;
-    /* background-color: #FCF9F9; */
 }
 
 .LAIheading {
@@ -21,8 +16,9 @@
 }
 
 img {
-    width: 100%;
+    max-width: 100%;
     height: auto;
+    display: block;
 }
 
 .Abt {
@@ -32,6 +28,7 @@ img {
 p {
     margin-top: 1rem;
     margin-bottom: 1rem;
+    line-height: 1.7;
 }
 
 ul {
@@ -45,4 +42,63 @@ ul li a {
 
 ul li a:hover {
     color: rgb(253, 188, 68);
+}
+
+/* Tablet and below */
+@media (max-width: 768px) {
+    .LAIwrapper {
+        padding: 2rem 1rem;
+    }
+    
+    .LAIheading {
+        font-size: clamp(1.5rem, 4vw, 2rem);
+        text-align: center;
+    }
+    
+    .Abt {
+        margin-top: 2rem;
+    }
+    
+    .Abt p {
+        font-size: 0.95rem;
+    }
+    
+    .ImageSection {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        margin: 1.5rem 0;
+    }
+    
+    .ImageSection img {
+        max-height: 250px;
+        object-fit: cover;
+        border-radius: 8px;
+    }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+    .LAIwrapper {
+        padding: 1.5rem 0.75rem;
+    }
+    
+    .LAIheading {
+        font-size: 1.3rem;
+    }
+    
+    .Abt p {
+        font-size: 0.9rem;
+        line-height: 1.6;
+    }
+    
+    .ImageSection img {
+        max-height: 200px;
+    }
+    
+    ul {
+        padding-left: 1rem;
+        font-size: 0.9rem;
+        padding-bottom: 2rem;
+    }
 }
