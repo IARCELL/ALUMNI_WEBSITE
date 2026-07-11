@@ -158,6 +158,67 @@ body {
     }
 }
 
+@media (max-width: 480px) {
+    .signup-container {
+        padding: 1rem 0.5rem;
+    }
+    .signup-form-wrapper {
+        padding: 1.5rem 1rem;
+        border-radius: 0.75rem;
+    }
+    .signup-header {
+        margin-bottom: 1.5rem;
+    }
+    .signup-header h1 {
+        font-size: 1.5rem;
+    }
+    .signup-header p {
+        font-size: 0.8rem;
+    }
+    .signup-form-grid {
+        gap: 1rem;
+    }
+    .signup-input-field,
+    .signup-select-field {
+        padding: 0.4rem 0.75rem;
+        font-size: 0.85rem;
+    }
+    .signup-submit-button {
+        padding: 0.6rem 1rem;
+        font-size: 0.85rem;
+    }
+    .phone-field {
+        margin-bottom: 12px;
+    }
+    .placement-section {
+        margin-top: 15px;
+    }
+    .placement-section h3 {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 375px) {
+    .signup-form-wrapper {
+        padding: 1rem 0.75rem;
+    }
+    .signup-header h1 {
+        font-size: 1.3rem;
+    }
+    .signup-header p {
+        font-size: 0.75rem;
+    }
+    .signup-input-field,
+    .signup-select-field {
+        padding: 0.35rem 0.6rem;
+        font-size: 0.8rem;
+    }
+    .signup-submit-button {
+        padding: 0.5rem 0.8rem;
+        font-size: 0.8rem;
+    }
+}
+
 .link-btn {
     background: none;
     border: none;

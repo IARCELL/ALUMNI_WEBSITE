@@ -7,9 +7,91 @@
     font-family: "Poppins", sans-serif;
 }
 
+html {
+    font-size: 16px;
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+}
+
 body {
     background: white;
     color: black;
-    overflow: hidden;
+    overflow-x: hidden;
     overflow-y: scroll;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Responsive base font sizing */
+@media (max-width: 480px) {
+    html {
+        font-size: 14px;
+    }
+}
+
+@media (min-width: 481px) and (max-width: 768px) {
+    html {
+        font-size: 15px;
+    }
+}
+
+/* Ensure images are responsive by default */
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Improve touch targets on mobile */
+@media (max-width: 768px) {
+    a, button, input, select, textarea {
+        -webkit-tap-highlight-color: rgba(255, 165, 0, 0.2);
+    }
+    
+    /* Ensure minimum touch target size of 44x44px */
+    a, button, input[type="submit"], input[type="button"], 
+    .btn, .signin-button, .logout-button, .profile-icon,
+    .event-card, .gallery-item, .contact-card,
+    .alumni-signin-btn, .load-more-btn, .signup-submit-button {
+        min-height: 44px;
+        min-width: 44px;
+    }
+    
+    /* Improve spacing for touch targets */
+    .desktopMenuListItem {
+        padding: 0.75rem 0.5rem;
+        margin: 0 0.25rem;
+    }
+    
+    .ListItem {
+        padding: 0.875rem 1rem;
+    }
+    
+    /* Ensure form inputs are tall enough */
+    input, select, textarea {
+        min-height: 44px;
+        padding: 0.75rem 1rem;
+    }
+    
+    /* Improve button touch areas */
+    .btn, button {
+        padding: 0.75rem 1.25rem;
+    }
+    
+    /* Ensure links in cards have adequate touch area */
+    .event-card, .gallery-item, .contact-card {
+        padding: 0.5rem;
+    }
+    
+    /* Improve dropdown menu items */
+    .dropdownListItem {
+        padding: 0.875rem 1.25rem;
+    }
+    
+    /* Mobile menu items */
+    .navMenu .ListItem {
+        padding: 1rem;
+        font-size: 1rem;
+    }
 }
