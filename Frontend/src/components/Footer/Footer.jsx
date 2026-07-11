@@ -2,67 +2,51 @@
 // import React from "react";
 import './Footer.css';
 import iarLogo from '../../assets/iar3.jpg';
+import { FaHotel, FaGlobe, FaLinkedin, FaInstagram, FaYoutube, FaMapMarkerAlt, FaEnvelope, FaPhone } from 'react-icons/fa';
+
 function Footer() {
   return (
     <footer className="footer">
       <div className="footer-container">
         <div className="footer-content">
-          <div className="footer-section">
-            <img src={iarLogo} alt="IAR CELL" className="footer-logo" />
-            <h3>IAR CELL</h3>
-            <p>"Global Opportunities, Lifelong Connections"</p>
-            {/* <p>We here provide a lot of opportunity for every students from around the world to explore and learn in a conducive environment</p> */}
+          <div className="footer-section footer-brand">
+            <div className="brand-header">
+              <img src={iarLogo} alt="IAR CELL" className="footer-logo" />
+              <div className="brand-text">
+                <h3>IAR CELL</h3>
+                <p className="tagline">&ldquo;Global Opportunities, Lifelong Connections&rdquo;</p>
+              </div>
+            </div>
           </div>
           <div className="footer-section">
             <h3>USEFUL LINKS</h3>
             <ul>
-              {/* <li><a href="#">facebook-f</a></li> */}
-              {/* <li><a href="#">twitter</a></li> */}
-              <li><a href="https://iitpkd.ac.in/guest-house-hamsanandi">Guest-House</a></li>
-              <li><a href="https://ir.iitpkd.ac.in/">International Relations website</a></li>
-
-              <li><a href="https://www.linkedin.com/in/iit-palakkad-alumni-relations-19142a25b/">Linkedin-Alumni Relations</a></li>
-              {/* <li><a href="https://www.linkedin.com/in/iit-palakkad-alumni-relations-19142a25b?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app">linkedin-Alumni Relations/2 </a></li> */}
-              <li><a href="https://www.linkedin.com/company/international-relations-iit-palakkad/">Linkedin-International Relations</a></li>
-
-              <li><a href="https://www.instagram.com/iarcell.iitpkd/">Instagram</a></li>
-              <li><a href="http://www.youtube.com/@IARCellIITPalakkad">Youtube</a></li>
-
-             
-
-
+              <li><a href="https://iitpkd.ac.in/guest-house-hamsanandi"><FaHotel className="footer-icon" /> Guest-House</a></li>
+              <li><a href="https://ir.iitpkd.ac.in/"><FaGlobe className="footer-icon" /> International Relations website</a></li>
+              <li><a href="https://www.linkedin.com/in/iit-palakkad-alumni-relations-19142a25b/"><FaLinkedin className="footer-icon" /> LinkedIn - Alumni Relations</a></li>
+              <li><a href="https://www.linkedin.com/company/international-relations-iit-palakkad/"><FaLinkedin className="footer-icon" /> LinkedIn - International Relations</a></li>
+              <li><a href="https://www.instagram.com/iarcell.iitpkd/"><FaInstagram className="footer-icon" /> Instagram</a></li>
+              <li><a href="http://www.youtube.com/@IARCellIITPalakkad"><FaYoutube className="footer-icon" /> YouTube</a></li>
             </ul>
           </div>
           <div className="footer-section">
             <h3>CONTACT US</h3>
-            {/* <p>F1 Cabin, AGORA Building,NILA Campus IIT Palakkad Kerala 678623</p> */}
-              <p  className="address_data">Second Floor (Left Wing), </p>
-              <p className="address_data">  Dr. APJ Abdul Kalam Block,</p>
-              {/* <p className="address_data">Sahyadri Campus,  </p> */}
-              <p className="address_data">Indian Institute of Technology Palakkad, </p>
-              <p className="address_data">Kanjikode West, Palakkad - 678623,</p>
-              <p className="address_data"> Kerala.</p>
-
-              
-            <p className="address_data">ar_office@iitpkd.ac.in</p>
-            <p className="address_data">Mob: +91 7595911769</p>
-            <p className="address_data">Landline: +91-4912 09 2111</p>
+            <div className="contact-info">
+              <p className="address_data"><FaMapMarkerAlt className="footer-icon" /> Second Floor (Left Wing), Dr. APJ Abdul Kalam Block,</p>
+              <p className="address_data">  Indian Institute of Technology Palakkad,</p>
+              <p className="address_data">  Kanjikode West, Palakkad - 678623, Kerala.</p>
+              <p className="address_data"><FaEnvelope className="footer-icon" /> ar_office@iitpkd.ac.in</p>
+              <p className="address_data"><FaPhone className="footer-icon" /> Mob: +91 7595911769</p>
+              <p className="address_data"><FaPhone className="footer-icon" /> Landline: +91-4912 09 2111</p>
+            </div>
           </div>
         </div>
       </div>
       <div className="copyright">
-        <p>Copyright ©2025 Indian Institute of Technology Palakkad. All Rights Reserved.</p>
+        <p>Copyright &copy;2025 Indian Institute of Technology Palakkad. All Rights Reserved.</p>
       </div>
-      
     </footer>
-    
   );
 }
 
 export default Footer;
-
-
-
-  
-
-
