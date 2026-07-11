@@ -3,10 +3,10 @@ import React from 'react';
 import './contact.css';
 import contacts from '../../data/contacts.json';
 
-const ContactCard = ({ person }) => (
+const ContactCard = ({ person, index = 0 }) => (
   <div className="contact-card">
     <div className="card-image">
-      <img src={person.image} alt={person.name} />
+      <img src={person.image} alt={person.name} loading={index < 6 ? "eager" : "lazy"} />
     </div>
     <div className="card-content">
       <h3>{person.name}</h3>
@@ -49,7 +49,7 @@ const ContactPage = () => {
 
         <div className="contact-cards">
           {contacts.faculty.map((person, idx) => (
-            <ContactCard key={idx} person={person} />
+            <ContactCard key={idx} person={person} index={idx} />
           ))}
         </div>
       </div>
@@ -59,10 +59,10 @@ const ContactPage = () => {
         <h1 className="section-title">Student Team</h1>
         <div className="contact-cards">
           {contacts.studentHead.map((person, idx) => (
-            <ContactCard key={idx} person={person} />
+            <ContactCard key={idx} person={person} index={idx} />
           ))}
           {contacts.coreTeam.map((person, idx) => (
-            <ContactCard key={idx} person={person} />
+            <ContactCard key={idx} person={person} index={idx} />
           ))}
         </div>
       </div>

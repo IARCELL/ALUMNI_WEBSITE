@@ -2,6 +2,7 @@
   /* Clear the fixed navbar (min-height 5rem) so the heading isn't covered */
   padding: calc(5rem + 1.5rem) 0 3rem;
   min-height: 100vh;
+  background: oklch(0.9743 0.0183 86.146 / 0.4);
 }
 
 .gallery-header {
