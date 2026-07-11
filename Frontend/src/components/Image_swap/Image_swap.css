@@ -2,7 +2,7 @@
   width: 100%;
   padding: 60px 0;
   margin-top: 5rem;
-  background: #f8f9fa;
+  background: oklch(0.9743 0.0183 86.146 / 0.4);
 }
 
 .carousel-item {

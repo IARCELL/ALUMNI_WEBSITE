@@ -27,7 +27,7 @@ const Navbar = () => {
 </a>
 
       <div className="desktopMenu">
-        <Link to="/" className="desktopMenuListItem">Home</Link>
+        <Link to="/home" className="desktopMenuListItem">Home</Link>
         <Link to="/about" className="desktopMenuListItem">About us</Link>
         
         <div className="desktopMenuListItem alumni-trigger" onMouseEnter={() => setShowDropdown(true)} onMouseLeave={() => setShowDropdown(false)}>
@@ -66,7 +66,7 @@ const Navbar = () => {
       <img src={menu} alt="menu" className="mobmenu" onClick={() => setShowMenu(!showMenu)} />
 
       <div className="navMenu" style={{ display: showMenu ? 'flex' : 'none' }}>
-        <Link to="/" className="ListItem" onClick={() => setShowMenu(false)}>Home</Link>
+        <Link to="/home" className="ListItem" onClick={() => setShowMenu(false)}>Home</Link>
         <Link to="/about" className="ListItem" onClick={() => setShowMenu(false)}>About us</Link>
         {/* <Link to="/LifeAtIITPKD" className="ListItem" onClick={() => setShowMenu(false)}>Life At IITPKD</Link> */}
         
