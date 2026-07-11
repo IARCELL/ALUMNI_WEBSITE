@@ -108,17 +108,21 @@
     color: #f39c12;
 }
 
-.contact-info .address_data {
+.footer-contact-info {
+    background-color: transparent;
+}
+
+.footer-contact-info .address_data {
     margin: 0.6rem 0;
     font-size: 0.95rem;
     color: #ecf0f1;
-    line-height: 1.5;
+    line-height: 1.6;
     display: flex;
     align-items: flex-start;
-    gap: 8px;
+    gap: 10px;
 }
 
-.contact-info .address_data .footer-icon {
+.footer-contact-info .address_data .footer-icon {
     margin-top: 3px;
     flex-shrink: 0;
 }
@@ -151,7 +155,7 @@
     .footer-logo {
         width: 70px;
     }
-    .contact-info {
+    .footer-contact-info {
         text-align: left;
         max-width: 350px;
         margin: 0 auto;
