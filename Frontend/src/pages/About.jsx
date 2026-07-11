@@ -1,110 +1,157 @@
-// import React from 'react';
-
 import Footer from "../components/Footer/Footer"
 import Navbar from "../components/Navbar/Navbar"
-// import Events from "./Events"
 import "./About.css"
-import Aboutt from "../components/Main/Aboutt"
-import { useState } from "react"
-import { Link } from 'react-router-dom';
-// import Cultural from "../assets/Events.png"
-// import image1 from "../assets/image1.jpg"
-// import image2 from "../assets/image2.jpeg"
-// import image3 from "../assets/image3.jpeg"
-// import image4 from "../assets/image4.jpeg"
-// import oip from "../assets/OIP.jpeg"
 import Contacts from "../components/Contact/contact"
-
-
-
+import '../components/Main/Main.css'
+import { motion, useInView } from 'framer-motion'
+import { useRef } from 'react'
 
 const About = () => {
-  // const [EventNo,setEventNo]=useState(0)
+  const heroRef = useRef(null)
+  const isInView = useInView(heroRef, { once: true, margin: "-50px", amount: 0.1 })
+
+  // Animation variants for text
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.15,
+        delayChildren: 0.3,
+      }
+    }
+  }
+
+  const wordVariants = {
+    hidden: {
+      opacity: 0,
+      y: 30,
+      filter: 'blur(4px)'
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      filter: 'blur(0px)',
+      transition: {
+        duration: 0.6,
+        ease: [0, 0, 0.2, 1]
+      }
+    }
+  }
+
+  const fadeInUp = {
+    hidden: {
+      opacity: 0,
+      y: 30,
+      filter: 'blur(4px)'
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      filter: 'blur(0px)',
+      transition: {
+        duration: 0.6,
+        ease: [0, 0, 0.2, 1]
+      }
+    }
+  }
+
   return (
       <div className="About">
       <Navbar />
       
+      {/* Hero Section with Background Image */}
+      <section className="hero-section" ref={heroRef}>
+        <div className="hero-overlay"></div>
+        <div className="hero-content">
+          <motion.div
+            className="hero-text"
+            variants={containerVariants}
+            initial="hidden"
+            animate={isInView ? "visible" : "hidden"}
+          >
+            {/* Main Heading */}
+            <motion.h1 className="hero-heading">
+              <motion.span className="heading-word" variants={wordVariants}>About</motion.span>
+              <motion.span className="heading-word highlight" variants={wordVariants}>Us</motion.span>
+            </motion.h1>
 
-      <Aboutt />
-      
-{/* 
-      <ul className="AllEvents">
-        
-        <li className="Events">
-        <Link to ="/Event1">
-          
-              <div className="images">
-                <img src={Cultural} alt=" image" />
+            {/* Subheading */}
+            <motion.h2 className="hero-subheading" variants={fadeInUp}>
+              IIT Palakkad
+            </motion.h2>
 
-            </div>
+            {/* Event Details / Tagline */}
+            <motion.p className="hero-tagline" variants={fadeInUp}>
+              Alumni Relations Office
+            </motion.p>
 
-            <div className="title"> Cosmos</div>
-            
-            </Link>
-          </li>
-         
-        <li className="Events">
-          <Link to ="/Event2"><div className="Event E2">
-            <div className="images">
-            <img src={image4} alt=" image" />
+            {/* Description */}
+            <motion.div className="hero-description" variants={fadeInUp}>
+              <p>
+                The IIT Palakkad Alumni Relations Office aims to encourage and facilitate 
+                engagement of our alumni with each other, with our current students, and 
+                with the institute.
+                We actively promote alumni achievements, help them build connections, and 
+                work to address any concerns. Our alumni are an integral part of our 
+                institution, and through this platform, we invite you to stay connected 
+                and use the opportunity to network and collaborate.
+              </p>
+            </motion.div>
+          </motion.div>
+        </div>
+      </section>
 
+      {/* Additional Content Section */}
+      <section className="content-section">
+        <div className="content-container">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.6, ease: [0, 0, 0.2, 1] }}
+          >
+            <h2 className="content-heading">Our Mission</h2>
+            <p className="content-text">
+              To foster a lifelong connection between IIT Palakkad and its alumni community, 
+              creating a vibrant network that supports professional growth, knowledge sharing, 
+              and institutional development.
+            </p>
+          </motion.div>
 
-          </div>
-          
-            <div className="title">FAM - faculty alumni meet</div>
-          </div>
-          </Link></li>
-        <li className="Events">
-        <Link to ="/Event3"><div className="Event E3">
-            <div className="images">
-            <img src={image3} alt=" image" />
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.6, delay: 0.2, ease: [0, 0, 0.2, 1] }}
+          >
+            <h2 className="content-heading">What We Do</h2>
+            <p className="content-text">
+              We organize events, facilitate mentorship programs, showcase alumni achievements, 
+              and provide platforms for networking. Our initiatives include alumni meets, 
+              industry interactions, student-alumni connect sessions, and recognition programs.
+            </p>
+          </motion.div>
 
-
-            </div>
-            <div className="title"> Reconnecting faculty with alumni</div>
-          </div>
-        </Link></li>
-        <li className="Events">
-        <Link to ="/Event4"><div className="Event E4">
-            <div className="images">
-            <img src={image2} alt=" image" />
-
-
-            </div>
-            <div className="title">SAVAGE Talks - student alumni virtual age talks</div>
-          </div>
-          </Link>
-            </li>
-        <li className="Events">
-        <Link to ="/Event5"><div className="Event E5">
-            <div className="images">
-            <img src={oip} alt=" image" />
-
-
-            </div>
-            <div className="title">Informal session for students to engage with alumni</div>
-          </div>
-        </Link></li>
-        <li className="Events">
-        <Link to ="/Event6"><div className="Event E6">
-            <div className="images">
-            <img src={image1} alt=" image" />
-
-
-
-            </div>
-            <div className="title">Student Mentorship</div>
-          </div>
-        </Link></li>
-        </ul> */}
-      
-      
-
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.6, delay: 0.4, ease: [0, 0, 0.2, 1] }}
+          >
+            <h2 className="content-heading">Join Our Community</h2>
+            <p className="content-text">
+              Whether you are a recent graduate or a seasoned professional, your connection 
+              to IIT Palakkad matters. Join our growing community of alumni and be part of 
+              a network that spans across industries and continents.
+            </p>
+          </motion.div>
+        </div>
+      </section>
 
       <Contacts />
-
-        <Footer />
-      </div>
+      <Footer />
+    </div>
   )
 }
 

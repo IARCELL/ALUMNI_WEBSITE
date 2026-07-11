@@ -31,7 +31,7 @@ function Footer() {
           </div>
           <div className="footer-section">
             <h3>CONTACT US</h3>
-            <div className="contact-info">
+            <div className="footer-contact-info">
               <p className="address_data"><FaMapMarkerAlt className="footer-icon" /> Second Floor (Left Wing), Dr. APJ Abdul Kalam Block,</p>
               <p className="address_data">  Indian Institute of Technology Palakkad,</p>
               <p className="address_data">  Kanjikode West, Palakkad - 678623, Kerala.</p>
