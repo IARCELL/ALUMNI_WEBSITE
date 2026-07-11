@@ -1,7 +1,5 @@
 import '../Navbar/Navbar.css';
 import logo from '../../assets/iar.png';
-import iitpkd from '../../assets/iit_pkd.jpg';
-import contact from '../../assets/contact.png';
 import menu from "../../assets/menu.svg";
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
@@ -31,16 +29,13 @@ const Navbar = () => {
       <div className="desktopMenu">
         <Link to="/" className="desktopMenuListItem">Home</Link>
         <Link to="/about" className="desktopMenuListItem">About us</Link>
-        {/* <Link to="/LifeAtIITPKD" className="desktopMenuListItem">Life At IITPKD</Link> */}
         
-        <div className="desktopMenuListItem" onMouseEnter={() => setShowDropdown(true)} onMouseLeave={() => setShowDropdown(false)}>
+        <div className="desktopMenuListItem alumni-trigger" onMouseEnter={() => setShowDropdown(true)} onMouseLeave={() => setShowDropdown(false)}>
           Alumni
-          {showDropdown && (
-            <div className="dropdownMenu">
-              <Link to="/NotableAlumni" className="dropdownListItem">Notable Alumni</Link>
-              <Link to="/AlumniDirectorySignIn" className="dropdownListItem">Alumni Directory</Link>
-            </div>
-          )}
+          <div className={`dropdownMenu ${showDropdown ? 'visible' : ''}`}>
+            <Link to="/NotableAlumni" className="dropdownListItem" onClick={() => setShowDropdown(false)}>Notable Alumni</Link>
+            <Link to="/AlumniDirectorySignIn" className="dropdownListItem" onClick={() => setShowDropdown(false)}>Alumni Directory</Link>
+          </div>
         </div>
 
         <Link to="/events" className="desktopMenuListItem">Events</Link>

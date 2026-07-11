@@ -1,9 +1,5 @@
 
 .bg{
     background-color: #ffffff;
-    background-image: url('/1.png');
-    background-size: 1500px 1200px; 
-    background-position: top left;
-    background-repeat: repeat; 
     min-height: 100vh;
 }
