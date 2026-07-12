@@ -42,6 +42,14 @@ function MessageWithReadMore({ paragraphs, role }) {
   const isDeanMessage = role === "Dean Students' Message";
   const isFicMessage = role === "Faculty-in-Charge Message";
   
+  // Determine button class based on role
+  const getButtonClass = () => {
+    if (isDirectorMessage) return 'read-more-btn director-btn';
+    if (isDeanMessage) return 'read-more-btn dean-btn';
+    if (isFicMessage) return 'read-more-btn fic-btn';
+    return 'read-more-btn';
+  };
+  
   let messageParagraphs, shortMessage, needsReadMore;
   
   if (isDirectorMessage) {
@@ -71,7 +79,7 @@ function MessageWithReadMore({ paragraphs, role }) {
       
       {needsReadMore && (
         <button 
-          className={`read-more-btn director-btn`}
+          className={getButtonClass()}
           onClick={() => setExpanded(!expanded)}
         >
           {expanded ? 'Read Less' : 'Read More'}

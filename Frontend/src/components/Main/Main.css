@@ -147,16 +147,19 @@ body {
     background: linear-gradient(135deg, #f39c12, #e67e22);
     color: white;
     box-shadow: 0 4px 15px rgba(243, 156, 18, 0.3);
+    padding: 0.75rem 1.8rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border-radius: 30px;
+    letter-spacing: 0.5px;
 }
 
 .read-more-btn.director-btn:hover {
     background: linear-gradient(135deg, #e67e22, #d35400);
-    transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(243, 156, 18, 0.4);
 }
 
 .read-more-btn.director-btn:active {
-    transform: translateY(0);
     box-shadow: 0 2px 10px rgba(243, 156, 18, 0.3);
 }
 
@@ -167,16 +170,19 @@ body {
     background: linear-gradient(135deg, #0975a8, #075e8a);
     color: white;
     box-shadow: 0 4px 15px rgba(9, 117, 168, 0.3);
+    padding: 0.75rem 1.8rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border-radius: 30px;
+    letter-spacing: 0.5px;
 }
 
 .read-more-btn.dean-btn:hover {
     background: linear-gradient(135deg, #075e8a, #054d75);
-    transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(9, 117, 168, 0.4);
 }
 
 .read-more-btn.dean-btn:active {
-    transform: translateY(0);
     box-shadow: 0 2px 10px rgba(9, 117, 168, 0.3);
 }
 
@@ -211,11 +217,23 @@ body {
     margin-bottom: 20px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
     transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
 }
 
-.message-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+
+/* Role-specific card accent borders */
+
+.message-card.director-card {
+    border-left: 5px solid rgb(239, 159, 32);
+}
+
+.message-card.dean-card {
+    border-left: 5px solid #0975a8;
+}
+
+.message-card.fic-card {
+    border-left: 5px solid #27ae60;
 }
 
 .card-header {
@@ -223,6 +241,31 @@ body {
     align-items: center;
     gap: 25px;
     margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #e8e8e8;
+}
+
+/* Role-specific header backgrounds */
+
+.message-card.director-card .card-header {
+    background: linear-gradient(135deg, #fff8e1, #ffecb3);
+    margin: -30px -30px 20px -30px;
+    padding: 25px 30px;
+    border-radius: 13px 13px 0 0;
+}
+
+.message-card.dean-card .card-header {
+    background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+    margin: -30px -30px 20px -30px;
+    padding: 25px 30px;
+    border-radius: 13px 13px 0 0;
+}
+
+.message-card.fic-card .card-header {
+    background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+    margin: -30px -30px 20px -30px;
+    padding: 25px 30px;
+    border-radius: 13px 13px 0 0;
 }
 
 .image-wrapper {
@@ -238,22 +281,32 @@ body {
     transition: transform 0.4s ease;
 }
 
-.message-card:hover .enhanced-img {
-    transform: scale(1.08);
-}
 
 .role-text {
     font-size: 14px;
     font-weight: 700;
     letter-spacing: 1px;
-    color: #8b0000;
     margin-bottom: 6px;
+    text-transform: uppercase;
+}
+
+.message-card.director-card .role-text {
+    color: #d68910;
+}
+
+.message-card.dean-card .role-text {
+    color: #0975a8;
+}
+
+.message-card.fic-card .role-text {
+    color: #27ae60;
 }
 
 .name-text {
     font-size: 22px;
     margin: 0;
     color: #222;
+    font-weight: 600;
 }
 
 .profession-text {
@@ -306,6 +359,13 @@ body {
     }
     .DirectorMessage {
         padding: 0;
+    }
+    
+    .message-card.director-card .card-header,
+    .message-card.dean-card .card-header,
+    .message-card.fic-card .card-header {
+        margin: -30px -30px 20px -30px;
+        padding: 20px;
     }
 }
 
