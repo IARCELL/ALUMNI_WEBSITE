@@ -8,7 +8,7 @@
     width: 100%;
     max-width: 1200px;
     margin: 0 auto;
-    margin-top: 3rem;
+    margin-top: 6rem;
     background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
     font-family: 'Poppins', sans-serif;
     padding: 3rem 2rem;
@@ -394,7 +394,7 @@
 @media (max-width: 768px) {
     .subEvents {
         padding: 1.5rem 1rem;
-        margin-top: 2rem;
+        margin-top: 5.5rem;
     }
     
     .event-header {
@@ -482,7 +482,7 @@
 @media (max-width: 480px) {
     .subEvents {
         padding: 1rem 0.75rem;
-        margin-top: 1.5rem;
+        margin-top: 5rem;
     }
     
     .event-header {
@@ -566,7 +566,7 @@
 @media (max-width: 400px) {
     .subEvents {
         padding: 0.875rem 0.625rem;
-        margin-top: 1.25rem;
+        margin-top: 4.5rem;
     }
     
     .event-header {
