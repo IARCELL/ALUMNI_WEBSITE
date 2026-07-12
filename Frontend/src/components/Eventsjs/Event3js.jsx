@@ -1,19 +1,53 @@
-import React from 'react'
+import { motion } from 'framer-motion'
 import "./css.css"
 import BuildingTechStartup from '../../assets/Building a tech startup 1.png'
 import BuildingTechStartup2 from '../../assets/Building a tech startup 2.png'
 
 const Event3js = () => {
+  // Animation variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2,
+        delayChildren: 0.3,
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: {
+      opacity: 0,
+      y: 30,
+      filter: 'blur(4px)'
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      filter: 'blur(0px)',
+      transition: {
+        duration: 0.6,
+        ease: [0, 0, 0.2, 1]
+      }
+    }
+  };
+
   return (
-    <div className='subEvents'>
-      <div className="event-header">
+    <motion.div
+      className='subEvents'
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+    >
+      <motion.div className="event-header" variants={itemVariants}>
         <h1>Building a Tech Startup</h1>
         <p className="event-date">15th October 2024</p>
         <p className="event-speaker">Featured Speakers: Dr. Saishyam Narayanan & CA Saurabh Dashottar</p>
-      </div>
+      </motion.div>
       
-      <div className="event-content">
-        <div className="event-description">
+      <motion.div className="event-content" variants={containerVariants}>
+        <motion.div className="event-description" variants={itemVariants}>
           <h2>About the Session</h2>
           <p>
             Our distinguished event featured expert speakers Dr. Saishyam Narayanan, CEO of IIT Palakkad 
@@ -23,14 +57,18 @@ const Event3js = () => {
             from idea to successful venture. The interactive session covered essential topics including idea validation, 
             funding strategies, team building, and navigating the startup ecosystem.
           </p>
-        </div>
+        </motion.div>
 
-        <div className="event-image">
-          <img src={BuildingTechStartup} alt="Building a Tech Startup Session" className="event-photo" />
+        <motion.div className="event-image" variants={itemVariants}>
+          <img 
+            src={BuildingTechStartup} 
+            alt="Building a Tech Startup Session" 
+            className="event-photo" 
+          />
           <p className="image-caption">Building a Tech Startup - Expert session with Dr. Saishyam Narayanan and CA Saurabh Dashottar</p>
-        </div>
+        </motion.div>
 
-        <div className="speaker-info">
+        <motion.div className="speaker-info" variants={itemVariants}>
           <h2>About the Speakers</h2>
           <div className="speaker-details">
             <h3>Dr. Saishyam Narayanan</h3>
@@ -44,14 +82,18 @@ const Event3js = () => {
             <p><strong>Company:</strong> SFS Advisors Pvt. Ltd.</p>
             <p><strong>Expertise:</strong> Financial Advisory and Business Strategy</p>
           </div>
-        </div>
+        </motion.div>
 
-        <div className="event-image">
-          <img src={BuildingTechStartup2} alt="Building a Tech Startup Session Highlights" className="event-photo" />
+        <motion.div className="event-image" variants={itemVariants}>
+          <img 
+            src={BuildingTechStartup2} 
+            alt="Building a Tech Startup Session Highlights" 
+            className="event-photo" 
+          />
           <p className="image-caption">Session highlights showing startup strategies and entrepreneurial insights from industry experts</p>
-        </div>
-      </div>
-    </div>
+        </motion.div>
+      </motion.div>
+    </motion.div>
   )
 }
 
