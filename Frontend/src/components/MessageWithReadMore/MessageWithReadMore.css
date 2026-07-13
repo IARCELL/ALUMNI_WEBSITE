@@ -18,12 +18,12 @@
     box-shadow: 0 2px 10px rgba(243, 156, 18, 0.3);
 }
 
-/* Faculty-in-Charge Button - Green Background */
+/* Faculty-in-Charge Button - Orange Background (matching Director) */
 
 .read-more-btn.fic-btn {
-    background: linear-gradient(135deg, #27ae60, #229954);
+    background: linear-gradient(135deg, #f39c12, #e67e22);
     color: white;
-    box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
+    box-shadow: 0 4px 15px rgba(243, 156, 18, 0.3);
     padding: 0.75rem 1.8rem;
     font-size: 0.85rem;
     font-weight: 600;
@@ -32,12 +32,12 @@
 }
 
 .read-more-btn.fic-btn:hover {
-    background: linear-gradient(135deg, #229954, #1e8449);
-    box-shadow: 0 6px 20px rgba(39, 174, 96, 0.4);
+    background: linear-gradient(135deg, #e67e22, #d35400);
+    box-shadow: 0 6px 20px rgba(243, 156, 18, 0.4);
 }
 
 .read-more-btn.fic-btn:active {
-    box-shadow: 0 2px 10px rgba(39, 174, 96, 0.3);
+    box-shadow: 0 2px 10px rgba(243, 156, 18, 0.3);
 }
 
 @media screen and (max-width: 768px) {
