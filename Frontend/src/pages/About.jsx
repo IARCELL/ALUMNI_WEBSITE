@@ -3,6 +3,7 @@ import Navbar from "../components/Navbar/Navbar"
 import "./About.css"
 import Contacts from "../components/Contact/contact"
 import '../components/Main/Main.css'
+import { FaLinkedin, FaInstagram } from 'react-icons/fa'
 import { motion, useInView } from 'framer-motion'
 import { useRef } from 'react'
 
@@ -145,6 +146,48 @@ const About = () => {
               to IIT Palakkad matters. Join our growing community of alumni and be part of 
               a network that spans across industries and continents.
             </p>
+          </motion.div>
+
+          {/* Social Links Section */}
+          <motion.div
+            className="social-links-section"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.6, delay: 0.6, ease: [0, 0, 0.2, 1] }}
+          >
+            <h2 className="content-heading">Connect With Us</h2>
+            <div className="social-links-container">
+              <div className="linkedin-links-row">
+                <a
+                  href="https://www.linkedin.com/in/iit-palakkad-alumni-relations-19142a25b/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="social-link-item"
+                >
+                  <FaLinkedin className="social-icon linkedin-icon" />
+                  <span className="social-link-text">LinkedIn - Alumni Relations</span>
+                </a>
+                <a
+                  href="https://www.linkedin.com/company/international-relations-iit-palakkad/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="social-link-item"
+                >
+                  <FaLinkedin className="social-icon linkedin-icon" />
+                  <span className="social-link-text">LinkedIn - International Relations</span>
+                </a>
+              </div>
+              <a
+                href="https://www.instagram.com/iarcell.iitpkd/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="social-link-item"
+              >
+                <FaInstagram className="social-icon instagram-icon" />
+                <span className="social-link-text">Instagram</span>
+              </a>
+            </div>
           </motion.div>
         </div>
       </section>
