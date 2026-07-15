@@ -1,6 +1,6 @@
 .carousel-section {
   width: 100%;
-  padding: 60px 0;
+  padding: 20px 0 20px 0;
   margin-top: 5rem;
   background: oklch(0.9743 0.0183 86.146 / 0.4);
 }
