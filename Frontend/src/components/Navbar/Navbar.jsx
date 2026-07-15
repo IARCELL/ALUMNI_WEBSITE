@@ -1,5 +1,6 @@
 import '../Navbar/Navbar.css';
 import logo from '../../assets/iar.png';
+import iitPkdLogo from '../../assets/iit_pkd.jpg';
 import menu from "../../assets/menu.svg";
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
@@ -22,9 +23,14 @@ const Navbar = () => {
 
   return (
     <nav className="navbar">
-      <a href="/">
-  <img src={logo} alt="logo" className="logo1" />
-</a>
+      <div className="logo-link">
+        <a href="https://iitpkd.ac.in" target="_blank" rel="noopener noreferrer">
+          <img src={iitPkdLogo} alt="IIT PKD Logo" className="logo2" />
+        </a>
+        <a href="/">
+          <img src={logo} alt="IAR Cell Logo" className="logo1" />
+        </a>
+      </div>
 
       <div className="desktopMenu">
         <Link to="/home" className="desktopMenuListItem">Home</Link>

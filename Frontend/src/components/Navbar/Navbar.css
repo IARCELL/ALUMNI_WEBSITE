@@ -13,11 +13,26 @@
     box-shadow: 0 4px 10px rgba(31, 31, 28, 0.238);
 }
 
+.logo-link {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    text-decoration: none;
+    flex-shrink: 0;
+}
+
+.logo2 {
+    object-fit: contain;
+    height: 5rem;
+    width: 5rem;
+    flex-shrink: 0;
+}
+
 .logo1 {
-    object-fit: cover;
-    height: 4rem;
-    width: 10rem;
-    margin-right: 2rem;
+    object-fit: contain;
+    height: 3.5rem;
+    width: 8.5rem;
+    flex-shrink: 0;
 }
 
 .desktopMenu {
@@ -231,16 +246,27 @@
 
 @media screen and (max-width: 992px) {
     .desktopMenu {
-        gap: 0.5rem;
+        gap: 0.3rem;
     }
     .desktopMenuListItem {
-        margin: 0 0.5rem;
-        font-size: 0.9rem;
+        margin: 0 0.3rem;
+        font-size: 0.8rem;
     }
     .signin-button,
     .logout-button {
-        padding: 0.4rem 0.8rem;
-        font-size: 0.9rem;
+        padding: 0.3rem 0.6rem;
+        font-size: 0.8rem;
+    }
+    .logo2 {
+        height: 4.5rem;
+        width: 4.5rem;
+    }
+    .logo1 {
+        height: 3rem;
+        width: 7rem;
+    }
+    .logo-link {
+        gap: 0.75rem;
     }
 }
 
@@ -254,10 +280,16 @@
     .navMenu {
         display: flex;
     }
-    .logo {
-        height: 3.5rem;
-        width: 8rem;
-        margin-right: 1rem;
+    .logo2 {
+        height: 4.5rem;
+        width: 4.5rem;
+    }
+    .logo1 {
+        height: 3rem;
+        width: 7rem;
+    }
+    .logo-link {
+        gap: 0.75rem;
     }
 }
 
@@ -265,11 +297,32 @@
     .navbar {
         padding: 0 0.5rem;
     }
-    .logo {
-        height: 3rem;
-        width: 7rem;
+    .logo2 {
+        height: 3.5rem;
+        width: 3.5rem;
+    }
+    .logo1 {
+        height: 2.5rem;
+        width: 5.5rem;
+    }
+    .logo-link {
+        gap: 0.5rem;
     }
     .navMenu {
         width: 100%;
+    }
+}
+
+@media screen and (max-width: 360px) {
+    .logo2 {
+        height: 3rem;
+        width: 3rem;
+    }
+    .logo1 {
+        height: 2.2rem;
+        width: 4.5rem;
+    }
+    .logo-link {
+        gap: 0.4rem;
     }
 }
