@@ -33,33 +33,77 @@
 }
 
 .gallery-row {
-  overflow: hidden;
+  position: relative;
   width: 100%;
 }
 
+/* The track is the scroll container: auto-scroll drives scrollLeft, and the
+   same property is what dragging, the arrows and touch panning move. */
 .gallery-track {
   display: flex;
   gap: 1rem;
-  width: max-content;
-  /* slow, steady self-scroll */
-  animation: gallery-scroll 240s linear infinite;
-  will-change: transform;
+  overflow-x: auto;
+  overflow-y: hidden;
+  cursor: grab;
+  /* Keep this `auto` - the auto-scroll sets scrollLeft directly each frame
+     and `smooth` would fight it. The arrows opt into smooth per call. */
+  scroll-behavior: auto;
+  scrollbar-width: none;      /* Firefox */
+  -ms-overflow-style: none;   /* old Edge */
 }
 
-.gallery-track.reverse {
-  animation-direction: reverse;
+.gallery-track::-webkit-scrollbar {
+  display: none;
 }
 
-/* Pause the drift when the user is looking at a row */
-.gallery-row:hover .gallery-track {
-  animation-play-state: paused;
+.gallery-track.grabbing {
+  cursor: grabbing;
 }
 
-@keyframes gallery-scroll {
-  from { transform: translateX(0); }
-  /* track holds the row 2×, so -50% is exactly one set → seamless loop */
-  to   { transform: translateX(-50%); }
+/* Don't run the hover zoom while dragging - it fights the motion */
+.gallery-track.grabbing .gallery-item img {
+  transform: none;
 }
+
+.gallery-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 3;
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.22);
+  padding: 0;
+  color: #333;
+  line-height: 0;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.2s ease, background 0.2s ease;
+}
+
+.gallery-row:hover .gallery-arrow,
+.gallery-arrow:focus-visible {
+  opacity: 1;
+}
+
+.gallery-arrow:hover {
+  background: #fff;
+}
+
+.gallery-arrow.left { left: 0.5rem; }
+.gallery-arrow.right { right: 0.5rem; }
+
+/* Touch devices have no hover, so keep the arrows visible there */
+@media (hover: none) {
+  .gallery-arrow { opacity: 1; }
+}
+
 
 .gallery-item {
   flex: 0 0 auto;
@@ -70,10 +114,15 @@
   border-radius: 12px;
   overflow: hidden;
   line-height: 0;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .gallery-item img {
   height: 220px;
+  /* Reserve width so lazy-loaded photos don't collapse the track to zero
+     and make the auto-scroll stutter as they arrive. */
+  min-width: 180px;
   width: auto;
   object-fit: cover;
   display: block;
