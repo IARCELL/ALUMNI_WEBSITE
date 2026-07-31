@@ -17,6 +17,7 @@
     width: 100%;
     /* max-width: 1200px; */
     margin: 0 auto;
+    padding-top: 80px;
     padding-bottom: 2rem;
     /* Space before footer */
 }
@@ -27,7 +28,7 @@
 .alumni-divider {
     border: 0;
     height: 1px;
-    background: linear-gradient(to right, transparent, #0975a8, transparent);
+    background: linear-gradient(to right, transparent, #f4a300, transparent);
     margin: 0;
     width: 100%;
 }
@@ -47,6 +48,7 @@
     background-color: white;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border-top: 4px solid #f4a300;
 }
 
 
@@ -64,20 +66,20 @@
 
 .alumni-signin-btn {
     padding: 1rem 3rem;
-    background-color: #0975a8;
+    background-color: #f4a300;
     border-radius: 6px;
     color: white;
     margin: 1.5rem 0;
     text-decoration: none;
     font-weight: 500;
     transition: all 0.2s ease;
-    border: 1px solid #075e8a;
+    border: 1px solid #d98f00;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     font-size: 1rem;
 }
 
 .alumni-signin-btn:hover {
-    background-color: #075e8a;
+    background-color: #d98f00;
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
@@ -87,7 +89,7 @@
 
 .alumni-subtitle {
     font-size: 1.2rem;
-    color: #0975a8;
+    color: #f4a300;
     margin: 2rem 0 1rem;
     font-weight: 600;
 }
@@ -107,16 +109,16 @@
 /* Link */
 
 .alumni-link {
-    color: #0975a8;
+    color: #f4a300;
     text-decoration: none;
     font-weight: 500;
-    border-bottom: 1px dotted #0975a8;
+    border-bottom: 1px dotted #f4a300;
     transition: all 0.2s ease;
 }
 
 .alumni-link:hover {
-    color: #075e8a;
-    border-bottom-color: #075e8a;
+    color: #d98f00;
+    border-bottom-color: #d98f00;
 }
 
 
@@ -133,5 +135,8 @@
     }
     .alumni-description {
         font-size: 0.95rem;
+    }
+    .alumni-signin-container {
+        padding-top: 70px;
     }
 }
