@@ -42,7 +42,7 @@
   gap: 1rem;
   width: max-content;
   /* slow, steady self-scroll */
-  animation: gallery-scroll 70s linear infinite;
+  animation: gallery-scroll 240s linear infinite;
   will-change: transform;
 }
 
@@ -57,8 +57,8 @@
 
 @keyframes gallery-scroll {
   from { transform: translateX(0); }
-  /* track holds the row 4×, so -25% is exactly one set → seamless loop */
-  to   { transform: translateX(-25%); }
+  /* track holds the row 2×, so -50% is exactly one set → seamless loop */
+  to   { transform: translateX(-50%); }
 }
 
 .gallery-item {
