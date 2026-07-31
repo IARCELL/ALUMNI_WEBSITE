@@ -18,32 +18,39 @@
         }
     ],
     "studentHead": [{
-        "name": "KARTHIKEYA DARISHETTY",
+        "name": "SOORAM MITHIL REDDY",
         "title": "Student Head",
-        "email": "alumnicell@iitpkd.ac.in",
-        "linkedin": "https://www.linkedin.com/in/karthikeya-darishetty/",
-        "image": "/assets/club/karthekeya.jpg"
+        "email": "142401037@smail.iitpkd.ac.in",
+        "image": "/assets/club/mithil.jpg"
     }],
     "coreTeam": [{
-            "name": "MARAM RUTHVI",
+            "name": "ATHIRA",
             "title": "International Relations Lead",
-            "email": "142301021@smail.iitpkd.ac.in",
-            "linkedin": "https://www.linkedin.com/in/ruthvi-maram/",
-            "image": "/assets/club/ruthvi.jpg"
+            "email": "122401006@smail.iitpkd.ac.in"
         },
         {
-            "name": "SOORAM MITHIL REDDY",
+            "name": "RISHITH KUMAR REDDY",
             "title": "Alumni Relations Lead",
-            "email": "142401037@smail.iitpkd.ac.in",
-            "linkedin": "https://www.linkedin.com/in/mithil-reddy-67ab22366/",
-            "image": "/assets/club/mithil.jpg"
+            "email": "112501028@smail.iitpkd.ac.in",
+            "image": "/assets/club/rishith.jpg"
+        },
+        {
+            "name": "ROHAN JOSHI",
+            "title": "Technical Lead",
+            "email": "142401033@smail.iitpkd.ac.in",
+            "image": "/assets/club/rohan_joshi.jpg"
         },
         {
             "name": "KALLEPALLY SAI KIRAN",
             "title": "Technical Lead",
-            "email": "112201044@smail.iitpkd.ac.in",
-            "linkedin": "https://www.linkedin.com/in/kallepally-sai-kiran-5633992a8/",
+            "email": "142401034@smail.iitpkd.ac.in",
             "image": "/assets/club/sai_kiran.jpg"
+        },
+        {
+            "name": "PARTHIV",
+            "title": "Design Lead",
+            "email": "132301026@smail.iitpkd.ac.in",
+            "image": "/assets/club/parthiv.jpg"
         }
 
     ],

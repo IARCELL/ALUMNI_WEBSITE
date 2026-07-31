@@ -1,4 +1,7 @@
 # Local Netlify folder
 .netlify
+
+# Convocation 2026 photos - kept out of the repo, generated locally
+Frontend/public/gallery/convocation2026/
 extras
 /node_modules
