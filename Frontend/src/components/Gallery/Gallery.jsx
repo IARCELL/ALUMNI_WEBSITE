@@ -52,6 +52,7 @@ const GalleryRow = ({ images, reverse, onOpen }) => {
   const trackRef = useRef(null);
   const dragging = useRef(false);
   const dragDistance = useRef(0);
+  const captured = useRef(false);
   const resumeAt = useRef(0);
   // Sub-pixel scroll position. scrollLeft rounds, so accumulating ~0.3px per
   // frame straight onto it never moves - the position has to be kept here.
@@ -101,12 +102,9 @@ const GalleryRow = ({ images, reverse, onOpen }) => {
   // Drag to scroll (mouse only - touch already pans natively).
   const onPointerDown = (e) => {
     if (e.pointerType !== "mouse") return;
-    const el = trackRef.current;
     dragging.current = true;
     dragDistance.current = 0;
-    dragStart.current = { x: e.clientX, scrollLeft: el.scrollLeft };
-    setGrabbing(true);
-    el.setPointerCapture(e.pointerId);
+    dragStart.current = { x: e.clientX, scrollLeft: trackRef.current.scrollLeft };
   };
 
   const onPointerMove = (e) => {
@@ -114,6 +112,16 @@ const GalleryRow = ({ images, reverse, onOpen }) => {
     const el = trackRef.current;
     const dx = e.clientX - dragStart.current.x;
     dragDistance.current = Math.max(dragDistance.current, Math.abs(dx));
+
+    // Grab the pointer only once this is a real drag. Capturing on pointerdown
+    // would retarget pointerup to the track, so `click` would fire there
+    // instead of on the photo and nothing would ever open.
+    if (!captured.current) {
+      if (dragDistance.current <= DRAG_SLOP) return;
+      el.setPointerCapture(e.pointerId);
+      captured.current = true;
+      setGrabbing(true);
+    }
 
     let next = dragStart.current.scrollLeft - dx;
     const half = el.scrollWidth / 2;
@@ -129,9 +137,12 @@ const GalleryRow = ({ images, reverse, onOpen }) => {
   const endDrag = (e) => {
     if (!dragging.current) return;
     dragging.current = false;
-    setGrabbing(false);
-    holdAuto();
-    try { trackRef.current.releasePointerCapture(e.pointerId); } catch { /* already released */ }
+    if (captured.current) {
+      captured.current = false;
+      setGrabbing(false);
+      holdAuto();
+      try { trackRef.current.releasePointerCapture(e.pointerId); } catch { /* already released */ }
+    }
   };
 
   const nudge = (dir) => {
