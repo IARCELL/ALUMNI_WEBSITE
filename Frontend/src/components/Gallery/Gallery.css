@@ -99,9 +99,9 @@
 .gallery-arrow.left { left: 0.5rem; }
 .gallery-arrow.right { right: 0.5rem; }
 
-/* Touch devices have no hover, so keep the arrows visible there */
+/* Touch devices (no hover) use native touch scrolling, so hide arrows */
 @media (hover: none) {
-  .gallery-arrow { opacity: 1; }
+  .gallery-arrow { display: none; }
 }
 
 
