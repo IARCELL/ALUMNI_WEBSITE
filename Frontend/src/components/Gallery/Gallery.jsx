@@ -22,6 +22,8 @@ const events = [
 
 const photos = [...convocation2026, ...events];
 
+export { photos };
+
 // Spread the photos across N rows so each row has its own set to scroll.
 const ROWS = 3;
 const rows = Array.from({ length: ROWS }, (_, r) =>

@@ -21,18 +21,21 @@
         "name": "SOORAM MITHIL REDDY",
         "title": "Student Head",
         "email": "142401037@smail.iitpkd.ac.in",
+        "linkedin": "https://www.linkedin.com/in/mithil-reddy-67ab22366/",
         "image": "/assets/club/mithil.jpg"
     }],
     "coreTeam": [{
             "name": "ATHIRA S J",
             "title": "International Relations Lead",
             "email": "122401006@smail.iitpkd.ac.in",
+            "linkedin": "https://www.linkedin.com/in/athira-s-j-32a115348",
             "image": "/assets/club/athira_sj.jpg"
         },
         {
             "name": "RISHITH KUMAR REDDY",
             "title": "Alumni Relations Lead",
             "email": "112501028@smail.iitpkd.ac.in",
+            "linkedin": "https://www.linkedin.com/in/rishith-kumar-reddy-p-489727383/",
             "image": "/assets/club/rishith.jpg"
         },
         {
@@ -45,6 +48,7 @@
             "name": "SAI KIRAN",
             "title": "Technical Lead",
             "email": "142401034@smail.iitpkd.ac.in",
+            "linkedin": "https://www.linkedin.com/in/saikiran-vullengala/",
             "image": "/assets/club/sai_kiran.jpg"
         },
         {
