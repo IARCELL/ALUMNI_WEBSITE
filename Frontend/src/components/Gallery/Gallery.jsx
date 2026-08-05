@@ -5,7 +5,7 @@ import "./Gallery.css";
  * Photos are served from public/gallery/ as web-optimised JPEGs
  * (longest side 1600px, quality 80).
  */
-const CONVOCATION_COUNT = 53;
+const CONVOCATION_COUNT = 31;
 
 const convocation2026 = Array.from({ length: CONVOCATION_COUNT }, (_, i) => ({
   src: `/gallery/convocation2026/conv-${String(i + 1).padStart(2, "0")}.jpg`,
