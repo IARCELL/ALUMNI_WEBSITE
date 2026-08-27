@@ -70,21 +70,39 @@ const SignUpPage = () => {
   const BASE_URL = "https://alumni-website-v7pq.onrender.com";
 
    useEffect(() => {
- 
-    fetch(`${BASE_URL}/departments`)
-      .then((res) => res.json())
-      .then((data) => setDepartments(data))
-       .catch((err) => console.error("Error fetching departments:", err));
-     
-   fetch(`${BASE_URL}/passout-years`)
-      .then((res) => res.json())
-      .then((data) => setPassoutYears(data))
-      .catch((err) => console.error("Error fetching years:", err));
+    let cancelled = false;
+    let retries = 0;
 
-    fetch(`${BASE_URL}/degrees`)
-      .then((res) => res.json())
-      .then((data) => setDegrees(data))
-      .catch((err) => console.error("Error fetching degrees:", err));
+    const loadMetadata = () => {
+      const ts = Date.now();
+      Promise.all([
+        fetch(`${BASE_URL}/departments?t=${ts}`),
+        fetch(`${BASE_URL}/passout-years?t=${ts}`),
+        fetch(`${BASE_URL}/degrees?t=${ts}`)
+      ])
+        .then(([deptRes, yearRes, degRes]) => {
+          if (!deptRes.ok || !yearRes.ok || !degRes.ok) {
+            throw new Error('Metadata request failed');
+          }
+          return Promise.all([deptRes.json(), yearRes.json(), degRes.json()]);
+        })
+        .then(([deptData, yearData, degData]) => {
+          if (cancelled) return;
+          if (Array.isArray(deptData) && deptData.length) setDepartments(deptData);
+          if (Array.isArray(yearData) && yearData.length) setPassoutYears(yearData);
+          if (Array.isArray(degData) && degData.length) setDegrees(degData);
+        })
+        .catch((err) => {
+          console.error('Error fetching dropdown data:', err);
+          if (retries < 3) {
+            retries += 1;
+            setTimeout(loadMetadata, 2000);
+          }
+        });
+    };
+
+    loadMetadata();
+    return () => { cancelled = true; };
   }, []);
 
   const handleChange = (e) => {

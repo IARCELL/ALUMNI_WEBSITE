@@ -22,25 +22,65 @@ const AlumniDirectory = () => {
   const BASE_URL = "https://alumni-website-v7pq.onrender.com";
 
  useEffect(() => {
-  const cached = localStorage.getItem("alumniMetadata");
+    let cancelled = false;
 
-  if (cached) {
-    const data = JSON.parse(cached);
-    setYears(data.years);
-    setDepartments(data.departments);
-    setDegrees(data.degrees);
-    return;
-  }
+    const applyMetadata = (data) => {
+      if (cancelled || !data) return;
+      if (Array.isArray(data.years)) setYears(data.years);
+      if (Array.isArray(data.departments)) setDepartments(data.departments);
+      if (Array.isArray(data.degrees)) setDegrees(data.degrees);
+    };
 
-  fetch(`${BASE_URL}/alumni-metadata`)
-    .then((res) => res.json())
-    .then((data) => {
-      localStorage.setItem("alumniMetadata", JSON.stringify(data));
-      setYears(data.years);
-      setDepartments(data.departments);
-      setDegrees(data.degrees);
-    });
-}, []);
+    const CACHE_KEY = 'alumniMetadata';
+    const CACHE_TTL = 30 * 60 * 1000; // 30 minutes
+
+    // Only use a cached copy if it is valid and not expired; an old/broken
+    // cache (e.g. saved when the backend was cold) must NOT block a refresh.
+    try {
+      const cachedRaw = localStorage.getItem(CACHE_KEY);
+      if (cachedRaw) {
+        const cached = JSON.parse(cachedRaw);
+        if (cached && cached.timestamp && Date.now() - cached.timestamp < CACHE_TTL) {
+          applyMetadata(cached.data);
+          return;
+        }
+      }
+    } catch (e) {
+      console.error('Ignoring invalid metadata cache:', e);
+    }
+
+    // Cache-bust in case an HTTP proxy/CDN ignored the no-store header.
+    const ts = Date.now();
+    fetch(`${BASE_URL}/alumni-metadata?t=${ts}`)
+      .then((res) => {
+        if (!res.ok) throw new Error(`Metadata request failed (${res.status})`);
+        return res.json();
+      })
+      .then((data) => {
+        if (cancelled) return;
+        if (
+          data &&
+          Array.isArray(data.years) &&
+          Array.isArray(data.departments) &&
+          Array.isArray(data.degrees)
+        ) {
+          applyMetadata(data);
+          try {
+            localStorage.setItem(
+              CACHE_KEY,
+              JSON.stringify({ timestamp: Date.now(), data })
+            );
+          } catch (e) {
+            console.warn('Could not persist metadata cache:', e);
+          }
+        }
+      })
+      .catch((err) => console.error('Error fetching alumni metadata:', err));
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
 
   // useEffect(() => {

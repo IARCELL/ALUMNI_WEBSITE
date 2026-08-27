@@ -1,17 +1,21 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {db} from '../../firebase/firebaseConfig'
 // import { initializeApp } from 'firebase/firestore';
 import { getFirestore, collection, getDocs, addDoc, updateDoc, doc, deleteDoc } from 'firebase/firestore';
 import './Admin.css';
 import iarcell from '../../assets/iar.png';
 import { getSelectedAlumni,exportToCSV,exportToExcel,exportToPDF } from '../../utils/exportUtils';
+import {
+  FiPlus, FiEdit2, FiTrash2, FiDownload, FiUpload, FiFileText, FiFile,
+  FiGrid, FiUsers, FiSettings, FiX, FiChevronLeft, FiChevronRight,
+  FiRotateCcw, FiFilter, FiCheck, FiHardDrive, FiSearch, FiMenu, FiEye
+} from 'react-icons/fi';
 
 
 // const app = initializeApp(firebaseConfig);
 
 const AdminDashboard = () => {
   // State management
-  const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
   const [sidebarActive, setSidebarActive] = useState(false);
   const [alumniData, setAlumniData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -20,15 +24,16 @@ const AdminDashboard = () => {
   const [selectedYear, setSelectedYear] = useState('All Years');
   const [selectedStatus, setSelectedStatus] = useState("all");
   const [selectedSector, setselectedSector] = useState("All");
-  const [placementFilter, setplacemnetFilter] = useState("all");
-  const [ctcRange, setCtcRange] = useState({ min: "", max: "" });
   const [currentPage, setCurrentPage] = useState(1);
-  const [recordsPerPage] = useState(10);
+  const [jumpPage, setJumpPage] = useState('');
+  const [recordsPerPage, setRecordsPerPage] = useState(10);
+  const [recordsPerPageDraft, setRecordsPerPageDraft] = useState(10);
+  const hasActiveFilters = searchTerm !== '' || selectedDepartment !== 'All Departments' || selectedYear !== 'All Years' || selectedStatus !== 'all' || selectedSector !== 'All';
   const [selectedRows, setSelectedRows] = useState(new Set());
   const [notification, setNotification] = useState(null);
+  const [settingsSaved, setSettingsSaved] = useState(false);
   const [activeModal, setActiveModal] = useState(null);
   const fileInputRef = useRef(null);
-  
   
   const [departments, setDepartments] = useState([]);
   const [degrees, setDegrees] = useState([]);
@@ -65,30 +70,48 @@ const AdminDashboard = () => {
 
 // -------------------------------------------
 
-  useEffect(() => {
-    const fetchMetadata = async () => {
-      try {
-        const [deptRes, degRes, yearRes] = await Promise.all([
-          fetch('https://alumni-website-v7pq.onrender.com/departments'),
-          fetch('https://alumni-website-v7pq.onrender.com/degrees'),
-          fetch('https://alumni-website-v7pq.onrender.com/passout-years')
-        ]);
+  // Loads dropdown options (departments / degrees / passout years) from the API.
+  // Failure is non-fatal — the dropdowns just stay with whatever values are shown.
+const loadMetadata = useCallback(async () => {
+  try {
+    const ts = Date.now();
+    const base = 'https://alumni-website-v7pq.onrender.com';
+    const [deptRes, degRes, yearRes] = await Promise.all([
+      fetch(`${base}/departments?t=${ts}`),
+      fetch(`${base}/degrees?t=${ts}`),
+      fetch(`${base}/passout-years?t=${ts}`)
+    ]);
 
-        const [deptData, degData, yearData] = await Promise.all([
-          deptRes.json(), degRes.json(), yearRes.json()
-        ]);
+    if (!deptRes.ok || !degRes.ok || !yearRes.ok) {
+      throw new Error('One or more metadata requests failed');
+    }
 
-        setDepartments(deptData.map(d => d.Deparment));
-        setDegrees(degData.map(d => d.Degree));
-        setPassoutYears(yearData.map(y => y.YearOfPassOut));
-      } catch (error) {
-        console.error('Error fetching metadata:', error);
-        setErrorMessage('Failed to load dropdown options. Please try again later.');
-      }
-       };
+    const [deptData, degData, yearData] = await Promise.all([
+      deptRes.json(), degRes.json(), yearRes.json()
+    ]);
 
-    fetchMetadata();
-  }, []);
+    const newDepartments = Array.isArray(deptData)
+      ? deptData.map((d) => d && d.Department).filter(Boolean)
+      : [];
+    const newDegrees = Array.isArray(degData)
+      ? degData.map((d) => d && d.Degree).filter(Boolean)
+      : [];
+    const newYears = Array.isArray(yearData)
+      ? yearData.map((y) => y && (y.YearOfPassOut)).filter((v) => v != null && v !== '')
+      : [];
+
+    // Only overwrite with real data so good values are never clobbered by empties
+    if (newDepartments.length) setDepartments(newDepartments);
+    if (newDegrees.length) setDegrees(newDegrees);
+    if (newYears.length) setPassoutYears(newYears);
+  } catch (error) {
+    console.error('Error fetching metadata:', error);
+  }
+}, []);
+
+useEffect(() => {
+  loadMetadata();
+}, [loadMetadata]);
 
 
 
@@ -115,12 +138,7 @@ const AdminDashboard = () => {
   });
 
   const [editAlumni, setEditAlumni] = useState(null);
-
-  // Apply theme
-  useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem('theme', theme);
-  }, [theme]);
+  const [viewAlumni, setViewAlumni] = useState(null);
 
   // Fetch alumni data
   useEffect(() => {
@@ -147,6 +165,15 @@ const AdminDashboard = () => {
   const showNotification = (message, type = 'info') => {
     setNotification({ message, type });
     setTimeout(() => setNotification(null), 5000);
+  };
+
+  const clearFilters = () => {
+    setSearchTerm('');
+    setSelectedDepartment('All Departments');
+    setSelectedYear('All Years');
+    setSelectedStatus("all");
+    setselectedSector("All");
+    setCurrentPage(1);
   };
 
   // Form handlers
@@ -257,15 +284,13 @@ const AdminDashboard = () => {
 
   const toggleSelectAll = (checked) => {
     if (checked) {
-      const allIds = filteredAlumni.map(item => item.id);
-      setSelectedRows(new Set(allIds));
+      // Select only the rows visible on the current page,
+      // not every member across all pages.
+      const pageIds = currentRecords.map(item => item.id);
+      setSelectedRows(new Set(pageIds));
     } else {
       setSelectedRows(new Set());
     }
-  };
-
-  const toggleTheme = () => {
-    setTheme(theme === 'light' ? 'dark' : 'light');
   };
 
   const toggleSidebar = () => {
@@ -280,13 +305,30 @@ const AdminDashboard = () => {
 
   const openModal = (modalType, alumni = null) => {
     setActiveModal(modalType);
+    if (modalType === 'settings') {
+      setRecordsPerPageDraft(recordsPerPage);
+    }
     if (modalType === 'edit' && alumni) {
       setEditAlumni(alumni);
+    }
+    if (modalType === 'view' && alumni) {
+      setViewAlumni(alumni);
+      setEditAlumni(alumni); // pre-fill edit modal for the in-detail Edit action
     }
   };
 
   const closeModal = () => {
     setActiveModal(null);
+  };
+
+  const saveSettings = () => {
+    // Apply the chosen "records per page" value
+    setRecordsPerPage(Number(recordsPerPageDraft));
+    setCurrentPage(1);
+    setActiveModal(null);
+    // Show a fresh green success popup with a tick
+    setSettingsSaved(true);
+    setTimeout(() => setSettingsSaved(false), 2500);
   };
 
   // Filter and pagination
@@ -312,20 +354,22 @@ const AdminDashboard = () => {
   });
 
   // export the selected alumni (excel,csv ,pdf files)
+  // when an explicit dataset is passed (e.g. from the Records modal) it is used,
+  // otherwise the current table selection is used, falling back to all alumni.
 
-  const handleExportCSV = () => {
-    const data = getSelectedAlumni(alumniData, selectedRows);
-    exportToCSV(data);
+  const handleExportCSV = (explicitData) => {
+    const data = explicitData || getSelectedAlumni(alumniData, selectedRows);
+    exportToCSV(data.length ? data : alumniData);
   };
 
-  const handleExportExcel = () => {
-    const data = getSelectedAlumni(alumniData, selectedRows);
-    exportToExcel(data);
+  const handleExportExcel = (explicitData) => {
+    const data = explicitData || getSelectedAlumni(alumniData, selectedRows);
+    exportToExcel(data.length ? data : alumniData);
   };
 
-  const handleExportPDF = () => {
-    const data = getSelectedAlumni(alumniData, selectedRows);
-    exportToPDF(data);
+  const handleExportPDF = (explicitData) => {
+    const data = explicitData || getSelectedAlumni(alumniData, selectedRows);
+    exportToPDF(data.length ? data : alumniData);
   };
   
 
@@ -335,6 +379,31 @@ const AdminDashboard = () => {
   const totalPages = Math.ceil(filteredAlumni.length / recordsPerPage);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  // Jump-to-page logic with edge-case handling
+  const handleJumpToPage = (e) => {
+    e.preventDefault();
+    const parsed = parseInt(jumpPage, 10);
+
+    // Ignore empty / non-numeric input
+    if (isNaN(parsed) || parsed < 1) {
+      setJumpPage('');
+      return;
+    }
+
+    // Clamp to the actual last page:
+    // - if the user types 100 but there are only 25 pages, go to page 25
+    // - if they type 0 or negative, treat as page 1
+    const target = Math.min(parsed, totalPages);
+    paginate(target);
+    setJumpPage('');
+  };
+
+  const handleJumpInputChange = (e) => {
+    // Only allow digits — no minus signs, no letters, no dots
+    const value = e.target.value.replace(/\D/g, '');
+    setJumpPage(value);
+  };
 
   // Department options
   // const departments = [
@@ -348,11 +417,9 @@ const AdminDashboard = () => {
   const currentYear = new Date().getFullYear();
   const years = Array.from({ length: 20 }, (_, i) => (currentYear - i).toString());
 
-  // Get initials for avatar
-  const getInitials = (name) => {
-    if (!name) return '';
-    return name.split(' ').map(n => n[0]).join('').toUpperCase();
-  };
+  // Use the actual pass-out years from the database when available,
+  // otherwise fall back to a hardcoded list of the last 20 years.
+  const yearOptions = passoutYears.length ? passoutYears : years;
 
   // Get department class for badge
   const getDepartmentClass = (department) => {
@@ -366,14 +433,16 @@ const AdminDashboard = () => {
   };
 
   return (
-    <div className='admin-dashboard-container' data-theme={theme}>
+    <div className='admin-dashboard-container'>
       {/* Sidebar */}
       <aside className={`sidebar ${sidebarActive ? 'active' : ''}`}>
         <div className="sidebar-header">
-          <button className="sidebar-toggle" onClick={toggleSidebar}>
-            <span></span>
-            <span></span>
-            <span></span>
+          <div className="sidebar-brand">
+            <span className="sidebar-logo">ALUMNI</span>
+            <span className="sidebar-logo-sub">Management</span>
+          </div>
+          <button className="sidebar-toggle" onClick={toggleSidebar} aria-label="Close menu">
+            <FiX size={22} />
           </button>
         </div>
 
@@ -381,32 +450,19 @@ const AdminDashboard = () => {
           <ul>
             <li className="nav-item active">
               <a href="#" className="nav-link">
-                <svg className="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <rect x="3" y="3" width="7" height="7"/>
-                  <rect x="14" y="3" width="7" height="7"/>
-                  <rect x="14" y="14" width="7" height="7"/>
-                  <rect x="3" y="14" width="7" height="7"/>
-                </svg>
+                <FiGrid className="nav-icon" />
                 <span>Dashboard</span>
               </a>
             </li>
             <li className="nav-item">
               <a href="#" className="nav-link" onClick={() => openModal('records')}>
-                <svg className="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-                  <circle cx="9" cy="7" r="4"/>
-                  <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
-                  <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-                </svg>
+                <FiUsers className="nav-icon" />
                 <span>Alumni Records</span>
               </a>
             </li>
             <li className="nav-item">
               <a href="#" className="nav-link" onClick={() => openModal('settings')}>
-                <svg className="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <circle cx="12" cy="12" r="3"/>
-                  <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
-                </svg>
+                <FiSettings className="nav-icon" />
                 <span>Settings</span>
               </a>
             </li>
@@ -419,41 +475,25 @@ const AdminDashboard = () => {
         {/* Header */}
         <header className="header1">
           <div className="header-left">
+            <button className="sidebar-toggle header-menu-toggle" onClick={toggleSidebar} aria-label="Open menu">
+              <FiMenu size={22} />
+            </button>
             <h1 className="page-title">Alumni Management</h1>
           </div>
           <div className="header-right">
             <div className="search-container">
-              <svg className="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <circle cx="11" cy="11" r="8"/>
-                <path d="m21 21-4.35-4.35"/>
-              </svg>
+              <FiSearch className="search-icon" />
               <input 
                 type="text" 
                 placeholder="Search alumni..." 
                 className="search-input" 
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={(e) => {
+                  setSearchTerm(e.target.value);
+                  setCurrentPage(1);
+                }}
               />
             </div>
-            <button className="theme-toggle" onClick={toggleTheme}>
-              {theme === 'light' ? (
-                <svg className="theme-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-                </svg>
-              ) : (
-                <svg className="theme-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <circle cx="12" cy="12" r="5"/>
-                  <line x1="12" y1="1" x2="12" y2="3"/>
-                  <line x1="12" y1="21" x2="12" y2="23"/>
-                  <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
-                  <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
-                  <line x1="1" y1="12" x2="3" y2="12"/>
-                  <line x1="21" y1="12" x2="23" y2="12"/>
-                  <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
-                  <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
-                </svg>
-              )}
-            </button>
             <a href="/"><img src={iarcell} alt="IAR Cell IIT Palakkad" className="iarcell-logo" /></a>
           </div>
         </header>
@@ -469,110 +509,124 @@ const AdminDashboard = () => {
         {/* Action Buttons */}
         <div className="action-bar">
           <div className="action-buttons">
-            {/* LEFT SIDE ACTIONS */}
-    <button className="btn btn-primary" onClick={() => openModal('add')}>
-      <svg className="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-        <line x1="12" y1="5" x2="12" y2="19"/>
-        <line x1="5" y1="12" x2="19" y2="12"/>
-      </svg>
-      Add Alumni
-    </button>
+            <div className="action-group-grid">
+              {/* CELL 1: ADD */}
+              <button className="btn btn-primary" onClick={() => openModal('add')}>
+                <FiPlus className="btn-icon" />
+                Add Alumni
+              </button>
 
-    <button
-      className="btn btn-secondary"
-      onClick={() => {
-        if (selectedRows.size === 1) {
-          const selected = alumniData.find(a => a.id === Array.from(selectedRows)[0]);
-          openModal('edit', selected);
-        } else {
-          showNotification('Please select exactly one alumni to edit', 'error');
-        }
-      }}
-      disabled={selectedRows.size !== 1}
-    >
-      <svg className="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
-        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
-      </svg>
-      Update Selected
-    </button>
+              {/* CELL 2: UPDATE */}
+              <button
+                className="btn btn-secondary"
+                onClick={() => {
+                  if (selectedRows.size === 1) {
+                    const selected = alumniData.find(a => a.id === Array.from(selectedRows)[0]);
+                    openModal('edit', selected);
+                  } else {
+                    showNotification('Please select exactly one alumni to edit', 'error');
+                  }
+                }}
+                disabled={selectedRows.size !== 1}
+              >
+                <FiEdit2 className="btn-icon" />
+                Update Selected
+              </button>
 
-    <button
-      className="btn btn-danger"
-      onClick={deleteSelected}
-      disabled={selectedRows.size === 0}
-    >
-      <svg className="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-        <polyline points="3,6 5,6 21,6"/>
-        <path d="M19,6v14a2,2,0,0,1-2,2H7a2,2,0,0,1-2-2V6m3,0V4a2,2,0,0,1,2-2h4a2,2,0,0,1,2,2V6"/>
-        <line x1="10" y1="11" x2="10" y2="17"/>
-        <line x1="14" y1="11" x2="14" y2="17"/>
-      </svg>
-      {selectedRows.size > 0 ? `Delete (${selectedRows.size})` : 'Delete'}
-    </button>
-</div><div className='action-buttons'>
-    
-    {/* EXPORT BUTTONS (same style now) */}
-    <button className="btn btn-primary" onClick={handleExportCSV}>
-      CSV
-    </button>
+              {/* CELL 3: DELETE */}
+              <button
+                className="btn btn-danger"
+                onClick={deleteSelected}
+                disabled={selectedRows.size === 0}
+              >
+                <FiTrash2 className="btn-icon" />
+                {selectedRows.size > 0 ? `Delete (${selectedRows.size})` : 'Delete'}
+              </button>
 
-    <button className="btn btn-secondary" onClick={handleExportExcel}>
-      Excel
-    </button>
-
-    <button className="btn btn-primary" onClick={handleExportPDF}>
-      PDF
-    </button>
-
-  </div>
+              {/* CELL 4: EXPORT GROUP (kept horizontal) */}
+              <div className="export-buttons-group">
+                <button className="btn btn-export-small btn-export-csv" onClick={handleExportCSV}>
+                  <FiFileText className="btn-icon" />
+                  CSV
+                </button>
+                <button className="btn btn-export-small btn-export-excel" onClick={handleExportExcel}>
+                  <FiDownload className="btn-icon" />
+                  Excel
+                </button>
+                <button className="btn btn-export-small btn-export-pdf" onClick={handleExportPDF}>
+                  <FiFile className="btn-icon" />
+                  PDF
+                </button>
+              </div>
+            </div>
+          </div>
           {/* FILTERS */}
           <div className="table-controls">
-            <select 
-              className="filter-select" 
-              value={selectedDepartment}
-              onChange={(e) => setSelectedDepartment(e.target.value)}
-            >
-              <option>All Departments</option>
-              {departments.map(dept => (
-                <option key={dept} value={dept}>{dept}</option>
-              ))}
-            </select>
-            <select
-              className='filter-select'
-            value={setselectedSector}
-            onChange={(e) => setselectedSector(e.target.value)}>
-              
-              <option value="All">All Sectors</option>
-              <option value="Private">Private</option>
-              <option value="Government">Government</option>
-              <option value="Startup">Startup</option>
-              <option value="Entrepreneur">Entrepreneur</option>
-              <option value="Higher Studies">Higher Studies</option>
+            <div className="filter-row">
+              <select 
+                className="filter-select" 
+                value={selectedDepartment}
+                onChange={(e) => {
+                  setSelectedDepartment(e.target.value);
+                  setCurrentPage(1);
+                }}
+              >
+                <option>All Departments</option>
+                {departments.map(dept => (
+                  <option key={dept} value={dept}>{dept}</option>
+                ))}
+              </select>
+              <select
+                className='filter-select'
+                value={selectedSector}
+                onChange={(e) => {
+                  setselectedSector(e.target.value);
+                  setCurrentPage(1);
+                }}>
+                
+                <option value="All">All Sectors</option>
+                <option value="Private">Private</option>
+                <option value="Government">Government</option>
+                <option value="Startup">Startup</option>
+                <option value="Entrepreneur">Entrepreneur</option>
+                <option value="Higher Studies">Higher Studies</option>
 
-            </select>
+              </select>
 
 
-            <select 
-              className="filter-select" 
-              value={selectedYear}
-              onChange={(e) => setSelectedYear(e.target.value)}
-            >
-              <option>All Years</option>
-              {years.map(year => (
-                <option key={year} value={year}>{year}</option>
-              ))}
-            </select>
+              <select 
+                className="filter-select" 
+                value={selectedYear}
+                onChange={(e) => {
+                  setSelectedYear(e.target.value);
+                  setCurrentPage(1);
+                }}
+              >
+                <option>All Years</option>
+                {passoutYears.map(year => (
+                  <option key={year} value={year}>{year}</option>
+                ))}
+              </select>
 
-            <select
-              className='filter-select'
-              value={selectedStatus}
-              onChange={(e)=>setSelectedStatus(e.target.value)}
-            ><option value="all">All Status</option>
-              <option value="true">Verified</option>
-              <option  value="false">Not Verified</option>
+              <select
+                className='filter-select'
+                value={selectedStatus}
+                onChange={(e) => {
+                  setSelectedStatus(e.target.value);
+                  setCurrentPage(1);
+                }}
+              ><option value="all">All Status</option>
+                <option value="true">Verified</option>
+                <option  value="false">Not Verified</option>
 
-            </select>
+              </select>
+            </div>
+            {hasActiveFilters && (
+              <button className="btn btn-danger remove-filters-btn" onClick={clearFilters}>
+                <FiFilter className="btn-icon" />
+                Remove Filters
+              </button>
+            )}
           </div>
         </div>
 
@@ -616,10 +670,21 @@ const AdminDashboard = () => {
               <thead>
                 <tr>
                   <th>
-                    <input 
-                      type="checkbox" 
-                      className="checkbox" 
-                      checked={selectedRows.size === filteredAlumni.length && filteredAlumni.length > 0}
+                    <input
+                      type="checkbox"
+                      className="checkbox"
+                      checked={
+                        currentRecords.length > 0 &&
+                        currentRecords.every(item => selectedRows.has(item.id))
+                      }
+                      ref={(el) => {
+                        if (el) {
+                          const someSelected = currentRecords.some(item => selectedRows.has(item.id));
+                          const allSelected = currentRecords.length > 0 &&
+                            currentRecords.every(item => selectedRows.has(item.id));
+                          el.indeterminate = someSelected && !allSelected;
+                        }
+                      }}
                       onChange={(e) => toggleSelectAll(e.target.checked)}
                     />
                   </th>
@@ -647,12 +712,7 @@ const AdminDashboard = () => {
                         />
                       </td>
                       <td><span className="id-badge">{alumni.CampusID}</span></td>
-                      <td>
-                        <div className="user-info">
-                          <div className="user-avatar">{getInitials(alumni.Name)}</div>
-                          <span>{alumni.Name}</span>
-                        </div>
-                      </td>
+                      <td>{alumni.Name}</td>
                       <td>{alumni.Email}</td>
                       <td><span className={`dept-badge ${getDepartmentClass(alumni.Department)}`}>{alumni.Department ?alumni.Department :alumni.Deparment} </span></td>
                       <td>{alumni.YearOfPassOut}</td>
@@ -662,22 +722,18 @@ const AdminDashboard = () => {
                       <td>
                         <div className="action-buttons-cell">
                           <button 
-                            className="btn-icon-small edit-btn" 
-                            onClick={() => openModal('edit', alumni)}
+                            className="btn-icon-small view-btn" 
+                            onClick={() => openModal('view', alumni)}
+                            aria-label="View alumni details"
                           >
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
-                              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
-                            </svg>
+                            <FiEye />
                           </button>
                           <button 
                             className="btn-icon-small delete-btn" 
                             onClick={() => deleteAlumni(alumni.id)}
+                            aria-label="Delete alumni"
                           >
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                              <polyline points="3,6 5,6 21,6"/>
-                              <path d="M19,6v14a2,2,0,0,1-2,2H7a2,2,0,0,1-2-2V6m3,0V4a2,2,0,0,1,2-2h4a2,2,0,0,1,2,2V6"/>
-                            </svg>
+                            <FiTrash2 />
                           </button>
                         </div>
                       </td>
@@ -707,31 +763,9 @@ const AdminDashboard = () => {
                   onClick={() => paginate(currentPage - 1)}
                   disabled={currentPage === 1}
                 >
+                  <FiChevronLeft />
                   Previous
                 </button>
-                
-                {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-                  let pageNum;
-                  if (totalPages <= 5) {
-                    pageNum = i + 1;
-                  } else if (currentPage <= 3) {
-                    pageNum = i + 1;
-                  } else if (currentPage >= totalPages - 2) {
-                    pageNum = totalPages - 4 + i;
-                  } else {
-                    pageNum = currentPage - 2 + i;
-                  }
-                  
-                  return (
-                    <button
-                      key={pageNum}
-                      className={`pagination-btn ${currentPage === pageNum ? 'active' : ''}`}
-                      onClick={() => paginate(pageNum)}
-                    >
-                      {pageNum}
-                    </button>
-                  );
-                })}
                 
                 <button 
                   className="pagination-btn" 
@@ -739,7 +773,23 @@ const AdminDashboard = () => {
                   disabled={currentPage === totalPages}
                 >
                   Next
+                  <FiChevronRight />
                 </button>
+
+                <div className="pagination-jump">
+                  <span className="jump-label">Go to</span>
+                  <form className="jump-form" onSubmit={handleJumpToPage}>
+                    <input
+                      type="text"
+                      inputMode="numeric"
+                      className="jump-input"
+                      placeholder="Page #"
+                      value={jumpPage}
+                      onChange={handleJumpInputChange}
+                    />
+                    <button type="submit" className="jump-go-btn">Go</button>
+                  </form>
+                </div>
               </div>
             </div>
           )}
@@ -752,11 +802,8 @@ const AdminDashboard = () => {
           <div className="modal">
             <div className="modal-header">
               <h2>Add New Alumni</h2>
-              <button className="modal-close" onClick={closeModal}>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <line x1="18" y1="6" x2="6" y2="18"/>
-                  <line x1="6" y1="6" x2="18" y2="18"/>
-                </svg>
+              <button className="modal-close" onClick={closeModal} aria-label="Close">
+                <FiX />
               </button>
             </div>
             <div className="modal-body">
@@ -858,7 +905,7 @@ const AdminDashboard = () => {
                       value={newAlumni.YearOfPassOut}
                       onChange={handleInputChange}
                     >
-                      {years.map(year => (
+                      {yearOptions.map(year => (
                         <option key={year} value={year}>{year}</option>
                       ))}
                     </select>
@@ -915,8 +962,97 @@ const AdminDashboard = () => {
               </form>
             </div>
             <div className="modal-footer">
-              <button className="btn btn-secondary" onClick={closeModal}>Cancel</button>
-              <button className="btn btn-primary" onClick={addAlumni}>Add Alumni</button>
+              <button className="btn btn-secondary" onClick={closeModal}>
+                <FiX className="btn-icon" />
+                Cancel
+              </button>
+              <button className="btn btn-primary" onClick={addAlumni}>
+                <FiPlus className="btn-icon" />
+                Add Alumni
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* View Alumni Details Modal (read-only) */}
+      {activeModal === 'view' && viewAlumni && (
+        <div className="modal-overlay active" onClick={(e) => e.target === e.currentTarget && closeModal()}>
+          <div className="modal modal-view">
+            <div className="modal-header">
+              <h2>Alumni Details</h2>
+              <button className="modal-close" onClick={closeModal} aria-label="Close">
+                <FiX />
+              </button>
+            </div>
+            <div className="modal-body">
+              <div className="view-profile-card">
+                <div className="view-profile-header">
+                  <div className="view-avatar">{getInitials(viewAlumni.Name)}</div>
+                  <div className="view-header-info">
+                    <h3>{viewAlumni.Name}</h3>
+                    <p className="view-subtitle">
+                      {viewAlumni.Department || viewAlumni.Deparment || '-'}
+                      {viewAlumni.YearOfPassOut ? ` · Class of ${viewAlumni.YearOfPassOut}` : ''}
+                    </p>
+                    {viewAlumni.verified && <span className="view-verified-badge">✓ Verified</span>}
+                  </div>
+                </div>
+
+                <div className="view-section">
+                  <h4 className="view-section-title">Personal Details</h4>
+                  <div className="view-grid">
+                    <ViewDetail label="Campus ID" value={viewAlumni.CampusID} />
+                    <ViewDetail label="Full Name" value={viewAlumni.Name} />
+                    <ViewDetail label="Email" value={viewAlumni.Email} />
+                    <ViewDetail label="Gender" value={viewAlumni.Gender} />
+                    <ViewDetail label="Date of Birth" value={viewAlumni.DateOfBirth} />
+                    <ViewDetail label="Contact Number 1" value={viewAlumni.ContactNumber1} />
+                    <ViewDetail label="Contact Number 2" value={viewAlumni.ContactNumber2} />
+                    <ViewDetail label="WhatsApp Number" value={viewAlumni.WhatsAppNumber} />
+                    <ViewDetail label="Country Code" value={viewAlumni.CountryCode} />
+                    <ViewDetail label="LinkedIn Profile" value={viewAlumni.LinkedinProfile} />
+                    <ViewDetail label="Department" value={viewAlumni.Department || viewAlumni.Deparment} />
+                    <ViewDetail label="Degree Program" value={viewAlumni.Degree} />
+                    <ViewDetail label="Graduation Year" value={viewAlumni.YearOfPassOut} />
+                    <ViewDetail label="Hostel" value={viewAlumni.Hostel} />
+                    <ViewDetail label="Permanent Address" value={viewAlumni.PermanentAddress} />
+                    <ViewDetail label="Awards" value={viewAlumni.Awards} />
+                  </div>
+                </div>
+
+                <div className="view-section">
+                  <h4 className="view-section-title">Professional Details</h4>
+                  <div className="view-grid">
+                    <ViewDetail label="Job Title" value={viewAlumni.Designation} />
+                    <ViewDetail label="Company" value={viewAlumni.Organisation} />
+                    <ViewDetail label="Location" value={viewAlumni.Current_Location} />
+                    <ViewDetail label="Employee Sector" value={viewAlumni.EmployeeSector} />
+                    <ViewDetail label="Current CTC" value={viewAlumni.CurrentCTC} />
+                  </div>
+                </div>
+
+                <div className="view-section">
+                  <h4 className="view-section-title">Campus Placement Details</h4>
+                  <div className="view-grid">
+                    <ViewDetail label="Placed" value={viewAlumni.CampusPlacement?.Placed ? 'Yes' : 'No'} />
+                    <ViewDetail label="Company" value={viewAlumni.CampusPlacement?.Company} />
+                    <ViewDetail label="Role" value={viewAlumni.CampusPlacement?.Role} />
+                    <ViewDetail label="Package" value={viewAlumni.CampusPlacement?.Package} />
+                    <ViewDetail label="Year" value={viewAlumni.CampusPlacement?.Year} />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="modal-footer">
+              <button className="btn btn-secondary" onClick={closeModal}>
+                <FiX className="btn-icon" />
+                Close
+              </button>
+              <button className="btn btn-primary" onClick={() => openModal('edit', viewAlumni)}>
+                <FiEdit2 className="btn-icon" />
+                Edit Details
+              </button>
             </div>
           </div>
         </div>
@@ -928,11 +1064,8 @@ const AdminDashboard = () => {
           <div className="modal">
             <div className="modal-header">
               <h2>Update Alumni Information</h2>
-              <button className="modal-close" onClick={closeModal}>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <line x1="18" y1="6" x2="6" y2="18"/>
-                  <line x1="6" y1="6" x2="18" y2="18"/>
-                </svg>
+              <button className="modal-close" onClick={closeModal} aria-label="Close">
+                <FiX />
               </button>
             </div>
             <div className="modal-body">
@@ -1028,7 +1161,7 @@ const AdminDashboard = () => {
                       value={editAlumni.YearOfPassOut}
                       onChange={handleEditInputChange}
                     >
-                      {years.map(year => (
+                      {yearOptions.map(year => (
                         <option key={year} value={year}>{year}</option>
                       ))}
                     </select>
@@ -1083,8 +1216,14 @@ const AdminDashboard = () => {
               </form>
             </div>
             <div className="modal-footer">
-              <button className="btn btn-secondary" onClick={closeModal}>Cancel</button>
-              <button className="btn btn-primary" onClick={updateAlumni}>Update Alumni</button>
+              <button className="btn btn-secondary" onClick={closeModal}>
+                <FiX className="btn-icon" />
+                Cancel
+              </button>
+              <button className="btn btn-primary" onClick={updateAlumni}>
+                <FiCheck className="btn-icon" />
+                Update Alumni
+              </button>
             </div>
           </div>
         </div>
@@ -1096,20 +1235,26 @@ const AdminDashboard = () => {
           <div className="modal">
             <div className="modal-header">
               <h2>Alumni Records</h2>
-              <button className="modal-close" onClick={closeModal}>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <line x1="18" y1="6" x2="6" y2="18"/>
-                  <line x1="6" y1="6" x2="18" y2="18"/>
-                </svg>
+              <button className="modal-close" onClick={closeModal} aria-label="Close">
+                <FiX />
               </button>
             </div>
             <div className="modal-body">
               <div className="records-section">
                 <h3>Export Options</h3>
                 <div className="export-buttons">
-                  <button className="btn btn-primary">Export to CSV</button>
-                  <button className="btn btn-primary">Export to PDF</button>
-                  <button className="btn btn-primary">Export to Excel</button>
+                  <button className="btn btn-export-small btn-export-csv" onClick={() => handleExportCSV(alumniData)}>
+                    <FiFileText className="btn-icon" />
+                    CSV
+                  </button>
+                  <button className="btn btn-export-small btn-export-excel" onClick={() => handleExportExcel(alumniData)}>
+                    <FiDownload className="btn-icon" />
+                    Excel
+                  </button>
+                  <button className="btn btn-export-small btn-export-pdf" onClick={() => handleExportPDF(alumniData)}>
+                    <FiFile className="btn-icon" />
+                    PDF
+                  </button>
                 </div>
               </div>
               <div className="records-section">
@@ -1121,21 +1266,30 @@ const AdminDashboard = () => {
                     accept=".csv,.xlsx,.xls" 
                     style={{ display: 'none' }} 
                   />
-                  <button className="btn btn-secondary">Import from File</button>
+                  <button className="btn btn-action-import">
+                    <FiUpload className="btn-icon" />
+                    Import from File
+                  </button>
                   <p className="help-text">Supported formats: CSV, Excel (.xlsx, .xls)</p>
                 </div>
               </div>
               <div className="records-section">
                 <h3>Data Management</h3>
                 <div className="data-actions">
-                  <button className="btn btn-danger">Backup Data</button>
-                  <button className="btn btn-secondary">Restore Data</button>
-                  <button className="btn btn-danger">Clear All Data</button>
+                  <button className="btn btn-action-backup">
+                    <FiHardDrive className="btn-icon" />
+                    Backup Data
+                  </button>
+                  <button className="btn btn-action-restore">
+                    <FiRotateCcw className="btn-icon" />
+                    Restore Data
+                  </button>
+                  <button className="btn btn-action-clear">
+                    <FiTrash2 className="btn-icon" />
+                    Clear All Data
+                  </button>
                 </div>
               </div>
-            </div>
-            <div className="modal-footer">
-              <button className="btn btn-secondary" onClick={closeModal}>Close</button>
             </div>
           </div>
         </div>
@@ -1147,26 +1301,16 @@ const AdminDashboard = () => {
           <div className="modal">
             <div className="modal-header">
               <h2>Settings</h2>
-              <button className="modal-close" onClick={closeModal}>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <line x1="18" y1="6" x2="6" y2="18"/>
-                  <line x1="6" y1="6" x2="18" y2="18"/>
-                </svg>
+              <button className="modal-close" onClick={closeModal} aria-label="Close">
+                <FiX />
               </button>
             </div>
             <div className="modal-body">
               <div className="settings-section">
                 <h3>General Settings</h3>
                 <div className="setting-item">
-                  <label htmlFor="themeSetting">Theme</label>
-                  <select id="themeSetting" defaultValue={theme}>
-                    <option value="light">Light</option>
-                    <option value="dark">Dark</option>
-                  </select>
-                </div>
-                <div className="setting-item">
                   <label htmlFor="recordsPerPage">Records per page</label>
-                  <select id="recordsPerPage" defaultValue={recordsPerPage}>
+                  <select id="recordsPerPage" value={recordsPerPageDraft} onChange={(e) => setRecordsPerPageDraft(Number(e.target.value))}>
                     <option value="5">5</option>
                     <option value="10">10</option>
                     <option value="25">25</option>
@@ -1191,10 +1335,24 @@ const AdminDashboard = () => {
               </div>
             </div>
             <div className="modal-footer">
-              <button className="btn btn-secondary" onClick={closeModal}>Cancel</button>
-              <button className="btn btn-primary">Save Settings</button>
+              <button className="btn btn-secondary" onClick={closeModal}>
+                <FiX className="btn-icon" />
+                Cancel
+              </button>
+              <button className="btn btn-primary" onClick={saveSettings}>
+                <FiCheck className="btn-icon" />
+                Save Settings
+              </button>
             </div>
           </div>
+        </div>
+      )}
+
+      {/* Settings Saved popup - small green box with tick */}
+      {settingsSaved && (
+        <div className="settings-saved-popup">
+          <FiCheck className="settings-saved-tick" />
+          <span className="settings-saved-text">Settings saved</span>
         </div>
       )}
 
@@ -1209,6 +1367,23 @@ const AdminDashboard = () => {
       )}
     </div>
   );
+};
+
+const ViewDetail = ({ label, value }) => {
+  const display = value == null || value === '' ? '—' : (typeof value === 'object' ? JSON.stringify(value) : String(value));
+  return (
+    <div className="view-detail">
+      <span className="view-detail-label">{label}</span>
+      <span className="view-detail-value">{display}</span>
+    </div>
+  );
+};
+
+const getInitials = (name) => {
+  if (!name) return '?';
+  const parts = name.trim().split(/\s+/).filter(Boolean);
+  const initials = parts.slice(0, 2).map(p => p[0].toUpperCase()).join('');
+  return initials || '?';
 };
 
 export default AdminDashboard;
