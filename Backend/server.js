@@ -11,6 +11,13 @@ const PORT = process.env.PORT || 5175;
 app.use(cors());
 app.use(express.json());
 
+// Never let the browser/CDN cache dropdown metadata -
+// otherwise stale options can be shown until a hard refresh.
+app.use(["/alumni-metadata", "/passout-years", "/degrees", "/departments"], (req, res, next) => {
+    res.set("Cache-Control", "no-store, must-revalidate");
+    next();
+});
+
 // Simulate a connection check for the Firestore database
 firestore
     .collection("students")

@@ -3,11 +3,10 @@ import './Alumni_profile.css';
 import UpdateProfileModal from "./UpdateProfileModal";
 // import VerifyEmailModal from "./VerifyEmailModal";
 import pic from './profile_pic.png'; // Default profile picture
-import iitpkdlogo from './iitpkdlogo.jpg';
-import iarcell_logo from './iarcell_logo.png';
 import useStore from '../../Store';
 import Navbar from '../Navbar/Navbar';
 import { getAuth} from "firebase/auth"
+import { FiEdit2 } from 'react-icons/fi';
 
 
 
@@ -36,6 +35,16 @@ const AlumniProfile = () => {
     setShowSuccess(true);
     setTimeout(() => setShowSuccess(false), 3000); 
   };
+
+  // Prevent the background page from scrolling while the update modal is open,
+  // so the dialogue stays fixed in place on screen.
+  useEffect(() => {
+    if (showUpdateModal) {
+      const prevOverflow = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+      return () => { document.body.style.overflow = prevOverflow; };
+    }
+  }, [showUpdateModal]);
 
   // //toaster for verify
   // const handleVerify = () =>{
@@ -371,13 +380,6 @@ if (!profile) {
         <div>
           <Navbar />
 
-          {/* <header className="top-header"> */}
-            {/* <div className="header-logos"> */}
-              {/* <img src={iitpkdlogo} alt="IIT Palakkad Logo" className="logo-effect iit-logo" /> */}
-              {/* <img src={iarcell_logo} alt="IAR Cell Logo" className="logo-effect iar-logo" /> */}
-            {/* </div> */}
-          {/* </header> */}
-
           {/* Page Header Section */}
           <section className="page-header">
             <div className="container">
@@ -464,7 +466,7 @@ if (!profile) {
             onClick={() => setShowUpdateModal(true)}
             className="styled-button update-button"
           >
-            ✏️ Update Profile
+            <FiEdit2 /> Update Profile
            </button>
 
           {/* <button

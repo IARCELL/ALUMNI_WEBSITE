@@ -21,6 +21,7 @@ import './App.css';
 import IDCardGeneratorPage from './pages/IDCardGenerator/IDCardGenerator';
 import NotFoundPage from './components/PageNotFound/NotFoudPage';
 import Preloader from './components/Preloader/Preloader';
+import DemoProfile from './pages/DemoProfile';
 function App() {
   const token = useStore((state) => state.token);
   const user = useStore((state) => state.userRole);
@@ -49,6 +50,7 @@ function App() {
           <Route path="/id-card-generator" element={<IDCardGeneratorPage />} />
         <Route element={<PrivateRouteProfile token={token}/>}> <Route path="/AlumniDirectory" element={<AlumniDirectory />} />  </Route>
         <Route element={<PrivateRouteProfile token={token}/>}> <Route path="/profile" element={<AlumniProfile />} />  </Route>
+        <Route path="/profile-demo" element={<DemoProfile />} />  {/* Dummy profile preview (no auth needed) */}
         <Route element={<PrivateRouteProfile token={user==="admin"}/>}> <Route path="/admin-dashboard" element={<Admin />} />  </Route>
         {/* <Route path="/Dashboard" element={<Admin />} />   */}
           <Route path="*" element={<NotFoundPage />} />
