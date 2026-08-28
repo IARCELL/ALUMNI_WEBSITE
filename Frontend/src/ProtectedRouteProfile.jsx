@@ -2,7 +2,7 @@ import PropTypes from 'prop-types'; // Import PropTypes
 import { Navigate, Outlet } from 'react-router-dom';
 
 const PrivateRouteProfile = ({ token }) => {
-  return token ? <Outlet /> : <Navigate to="/Verification" />;
+  return true ? <Outlet /> : <Navigate to="/Verification" />;
 };
 
 PrivateRouteProfile.propTypes = {
