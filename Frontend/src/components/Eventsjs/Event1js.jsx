@@ -1,11 +1,6 @@
 import { motion } from "framer-motion";
 import "./css.css";
-import AR1 from "../../assets/Alumni Reunion/AR 1C.webp";
-import AR2 from "../../assets/Alumni Reunion/AR 2C.webp";
-import AR3 from "../../assets/Alumni Reunion/AR 3C.webp";
-import AR4 from "../../assets/Alumni Reunion/AR 4C.webp";
-import AR5 from "../../assets/Alumni Reunion/AR 5C.webp";
-import AR6 from "../../assets/Alumni Reunion/AR 6C.webp";
+
 
 const Event1js = () => {
   const containerVariants = {
@@ -110,54 +105,7 @@ const Event1js = () => {
 
 
         {/* Image */}
-<motion.figure
-  className="event-image w-full"
-  variants={itemVariants}
-  whileHover={{ y: -8 }}
-  transition={{ duration: 0.3 }}
->
-  <div className="space-y-4 flex-col">
 
-    {/* Featured image */}
-    <div className="group overflow-hidden rounded-3xl border border-white/10 bg-black/10 shadow-xl">
-      <img
-        src={AR1}
-        alt="SAC Alumni Meet"
-        className="block h-auto w-full transition-transform duration-500 group-hover:scale-[1.02] "
-      />
-    </div>
-
-    {/* 2 × 2 gallery */}
-    <div className="grid grid-cols-2 gap-4">
-      {[AR2, AR3, AR4, AR6].map((image, index) => (
-        <div
-          key={index}
-          className="group overflow-hidden rounded-2xl border border-white/10 bg-black/10 shadow-lg"
-        >
-          <img
-            src={image}
-            alt={`SAC Alumni Meet - Photo ${index + 2}`}
-            className="block h-auto w-full transition-transform duration-500 group-hover:scale-[1.03]"
-          />
-        </div>
-      ))}
-    </div>
-
-    {/* Final wide image */}
-    <div className="group overflow-hidden rounded-3xl border border-white/10 bg-black/10 shadow-xl">
-      <img
-        src={AR5}
-        alt="SAC Alumni Meet"
-        className="block h-auto w-full transition-transform duration-500 group-hover:scale-[1.02]"
-      />
-    </div>
-
-  </div>
-
-  <figcaption className="mt-6 text-center text-lg font-medium tracking-wide">
-    First Alumni Reunion
-  </figcaption>
-</motion.figure>
 
       </motion.div>
     </motion.section>
